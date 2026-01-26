@@ -1,5 +1,5 @@
 /**
- * LBVP Admin Dashboard
+ * poxter88 Admin Dashboard
  * Handles authentication, product management, orders, and analytics
  */
 

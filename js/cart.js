@@ -1,5 +1,5 @@
 /**
- * LBVP - Shopping Cart Functionality
+ * poxter88 - Shopping Cart Functionality
  * Handles cart operations, storage, and UI updates
  */
 

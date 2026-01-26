@@ -1,5 +1,5 @@
 /**
- * LBVP - Checkout & Validation Module
+ * poxter88 - Checkout & Validation Module
  * Handles pre-purchase validation and checkout form
  */
 

@@ -1,5 +1,5 @@
 /**
- * LBVP - Main JavaScript
+ * poxter88 - Main JavaScript
  * Handles navigation, modals, animations, and general functionality
  */
 

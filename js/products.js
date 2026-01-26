@@ -1,5 +1,5 @@
 /**
- * LBVP - Products Data
+ * poxter88 - Products Data
  * Mock product data matching the Label by VP website
  */
 
