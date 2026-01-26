@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LBVP - Premium fashion label offering exclusive shirts, pants, and custom-made clothing. Shop the latest collection with free shipping.">
+    <meta name="description"
+        content="LBVP - Premium fashion label offering exclusive shirts, pants, and custom-made clothing. Shop the latest collection with free shipping.">
     <meta name="keywords" content="fashion, clothing, shirts, pants, premium, label, LBVP">
     <title>LBVP - Premium Fashion Label</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
-    
+
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E👔%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E👔%3C/text%3E%3C/svg%3E">
 </head>
+
 <body>
     <!-- Announcement Bar -->
     <div class="announcement-bar">
@@ -38,7 +44,8 @@
             <!-- Logo -->
             <a href="#" class="logo">
                 <svg class="logo-svg" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <text x="0" y="30" font-family="Oswald, sans-serif" font-size="32" font-weight="600" fill="currentColor">LBVP</text>
+                    <text x="0" y="30" font-family="Oswald, sans-serif" font-size="32" font-weight="600"
+                        fill="currentColor">LBVP</text>
                 </svg>
             </a>
 
@@ -57,19 +64,22 @@
             <!-- Header Actions -->
             <div class="header-actions">
                 <button class="action-btn search-btn" id="searchBtn" aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
                 </button>
                 <button class="action-btn account-btn" aria-label="Account">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </button>
                 <button class="action-btn cart-btn" id="cartBtn" aria-label="Cart">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
                         <path d="M3 6h18"></path>
                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -96,7 +106,8 @@
     <div class="search-modal" id="searchModal">
         <div class="search-modal-content">
             <button class="search-close" id="searchClose" aria-label="Close search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
                 </svg>
@@ -104,7 +115,8 @@
             <form class="search-form">
                 <input type="text" placeholder="Search our store..." class="search-input" id="searchInput">
                 <button type="submit" class="search-submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
@@ -119,10 +131,8 @@
         <section class="hero" id="home">
             <div class="hero-content">
                 <div class="hero-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1200&h=1600&fit=crop" 
-                         alt="Model wearing LBVP premium shirt" 
-                         class="hero-image"
-                         loading="eager">
+                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1200&h=1600&fit=crop"
+                        alt="Model wearing LBVP premium shirt" class="hero-image" loading="eager">
                     <a href="#shirts" class="hero-cta">Shop Now</a>
                 </div>
             </div>
@@ -135,11 +145,11 @@
                     <h2 class="section-title">SHIRTS</h2>
                     <p class="section-subtitle">Shop Our Latest Collection</p>
                 </div>
-                
+
                 <div class="products-grid" id="shirtsGrid">
                     <!-- Products will be dynamically loaded -->
                 </div>
-                
+
                 <div class="section-cta">
                     <a href="#shirts" class="btn btn-primary">View all</a>
                 </div>
@@ -153,11 +163,11 @@
                     <h2 class="section-title">PANTS</h2>
                     <p class="section-subtitle">Elevate Your Style</p>
                 </div>
-                
+
                 <div class="products-grid" id="pantsGrid">
                     <!-- Products will be dynamically loaded -->
                 </div>
-                
+
                 <div class="section-cta">
                     <a href="#pants" class="btn btn-primary">View all</a>
                 </div>
@@ -171,17 +181,16 @@
                     <h2 class="section-title">MADE ON ORDER</h2>
                     <p class="section-subtitle">Custom Tailored Just For You</p>
                 </div>
-                
+
                 <div class="featured-banner">
                     <div class="featured-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&h=800&fit=crop" 
-                             alt="Custom tailored clothing" 
-                             class="featured-image"
-                             loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&h=800&fit=crop"
+                            alt="Custom tailored clothing" class="featured-image" loading="lazy">
                     </div>
                     <div class="featured-content">
                         <h3 class="featured-title">Get Your Perfect Fit</h3>
-                        <p class="featured-text">Our expert tailors craft each piece to your exact measurements. Experience the luxury of custom-made clothing.</p>
+                        <p class="featured-text">Our expert tailors craft each piece to your exact measurements.
+                            Experience the luxury of custom-made clothing.</p>
                         <a href="#made-on-order" class="btn btn-secondary">Order Now</a>
                     </div>
                 </div>
@@ -195,11 +204,11 @@
                     <h2 class="section-title">ON SALE</h2>
                     <p class="section-subtitle">Limited Time Offers</p>
                 </div>
-                
+
                 <div class="products-grid" id="saleGrid">
                     <!-- Sale products will be dynamically loaded -->
                 </div>
-                
+
                 <div class="section-cta">
                     <a href="#sale" class="btn btn-primary">View all</a>
                 </div>
@@ -250,7 +259,9 @@
                     <div class="newsletter-input-wrapper">
                         <input type="email" placeholder="Email" class="newsletter-input" id="newsletterEmail" required>
                         <button type="submit" class="newsletter-submit" aria-label="Subscribe">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path d="M5 12h14"></path>
                                 <path d="m12 5 7 7-7 7"></path>
                             </svg>
@@ -261,8 +272,10 @@
 
             <!-- Social Links -->
             <div class="social-section">
-                <a href="https://instagram.com/labelbyvp" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <a href="https://instagram.com/labelbyvp" class="social-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                         <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
@@ -290,7 +303,8 @@
         <div class="cart-header">
             <h3 class="cart-title">Your Cart</h3>
             <button class="cart-close" id="cartClose" aria-label="Close cart">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
                 </svg>
@@ -298,7 +312,8 @@
         </div>
         <div class="cart-body" id="cartBody">
             <div class="cart-empty">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
                     <path d="M3 6h18"></path>
                     <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -319,7 +334,8 @@
     <div class="quickview-modal" id="quickviewModal">
         <div class="quickview-content">
             <button class="quickview-close" id="quickviewClose" aria-label="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
                 </svg>
@@ -347,9 +363,157 @@
         </div>
     </div>
 
+    <!-- Validation Modal -->
+    <div class="modal validation-modal" id="validationModal">
+        <div class="modal-content validation-content">
+            <button class="modal-close" onclick="window.lbvpCheckout.closeValidationModal()" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+            </button>
+            <div class="modal-header">
+                <h2>Cart Validation</h2>
+                <p>Checking your order before checkout</p>
+            </div>
+            <div class="modal-body" id="validationContent">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="window.lbvpCheckout.closeValidationModal()">Back to
+                    Cart</button>
+                <button class="btn btn-primary" id="proceedToCheckout"
+                    onclick="window.lbvpCheckout.showCheckoutForm()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal checkout-modal" id="checkoutModal">
+        <div class="modal-content checkout-content">
+            <button class="modal-close" onclick="window.lbvpCheckout.closeCheckoutModal()" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+            </button>
+            <div class="checkout-grid">
+                <!-- Checkout Form -->
+                <div class="checkout-form-section">
+                    <div class="checkout-header">
+                        <h2>Checkout</h2>
+                        <div class="checkout-steps">
+                            <span class="step active">1. Details</span>
+                            <span class="step-divider"></span>
+                            <span class="step">2. Confirm</span>
+                        </div>
+                    </div>
+                    <div id="formErrors"></div>
+                    <form id="checkoutForm" onsubmit="event.preventDefault(); window.lbvpCheckout.submitOrder();">
+                        <div class="form-section">
+                            <h3>Contact Information</h3>
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name"
+                                    required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="10-digit mobile" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Delivery Address</h3>
+                            <div class="form-group">
+                                <label for="address">Street Address *</label>
+                                <textarea id="address" name="address" rows="2"
+                                    placeholder="House/Flat No., Building, Street" required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" placeholder="Your city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pincode">Pincode *</label>
+                                    <input type="text" id="pincode" name="pincode" placeholder="6-digit pincode"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Payment Method</h3>
+                            <div class="payment-options">
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="cod" checked>
+                                    <div class="payment-option-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                            <path d="M2 10h20"></path>
+                                        </svg>
+                                        <div><strong>Cash on Delivery</strong><span>Pay when you receive</span></div>
+                                    </div>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="upi">
+                                    <div class="payment-option-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                        <div><strong>UPI Payment</strong><span>GPay, PhonePe, Paytm</span></div>
+                                    </div>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="card">
+                                    <div class="payment-option-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                            <path d="M2 10h20"></path>
+                                        </svg>
+                                        <div><strong>Credit/Debit Card</strong><span>All major cards accepted</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary checkout-submit-btn">Place Order</button>
+                    </form>
+                </div>
+                <!-- Order Summary -->
+                <div class="checkout-summary-section">
+                    <h3>Order Summary</h3>
+                    <div id="orderSummary">
+                        <!-- Dynamic content -->
+                    </div>
+                    <div class="secure-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                        </svg>
+                        <span>Secure checkout with encrypted data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
