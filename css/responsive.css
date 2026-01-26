@@ -1,0 +1,521 @@
+/* ========================================
+   Responsive Styles
+   Mobile-first approach with breakpoints
+   ======================================== */
+
+/* ========================================
+   Small Mobile (320px - 375px)
+   ======================================== */
+@media screen and (max-width: 374px) {
+    :root {
+        --text-2xl: 1.75rem;
+        --text-3xl: 2rem;
+    }
+
+    .hero-cta {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-xs);
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2);
+    }
+
+    .product-info {
+        padding: var(--space-2) 0;
+    }
+
+    .product-title {
+        font-size: var(--text-xs);
+    }
+
+    .newsletter-input-wrapper {
+        flex-direction: column;
+    }
+
+    .newsletter-submit {
+        padding: var(--space-3);
+    }
+}
+
+/* ========================================
+   Mobile (375px - 576px)
+   ======================================== */
+@media screen and (min-width: 375px) and (max-width: 575px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+    }
+}
+
+/* ========================================
+   Large Mobile / Small Tablet (576px - 768px)
+   ======================================== */
+@media screen and (min-width: 576px) {
+    .container {
+        padding: 0 var(--space-6);
+    }
+
+    .header-container {
+        padding: 0 var(--space-6);
+    }
+
+    .hero-content {
+        max-width: 500px;
+    }
+
+    .section-title {
+        font-size: var(--text-3xl);
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-container {
+        padding: 0 var(--space-6);
+    }
+
+    .quickview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quickview-image img {
+        height: 350px;
+    }
+}
+
+/* ========================================
+   Tablet (768px - 992px)
+   ======================================== */
+@media screen and (min-width: 768px) {
+    :root {
+        --header-height: 70px;
+    }
+
+    .container {
+        padding: 0 var(--space-8);
+    }
+
+    .header-container {
+        padding: 0 var(--space-8);
+    }
+
+    /* Show desktop nav on larger screens */
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav-mobile {
+        display: none;
+    }
+
+    .nav-desktop {
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 100%;
+        background: var(--color-bg);
+        padding: var(--space-3) 0;
+    }
+
+    .logo {
+        position: relative;
+        left: 0;
+        transform: none;
+    }
+
+    .header-container {
+        justify-content: space-between;
+    }
+
+    .hero {
+        padding: var(--space-8);
+    }
+
+    .hero-content {
+        max-width: 600px;
+    }
+
+    .collection-section {
+        padding: var(--space-20) 0;
+    }
+
+    .section-header {
+        margin-bottom: var(--space-10);
+    }
+
+    .section-title {
+        font-size: var(--text-3xl);
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-6);
+    }
+
+    .featured-banner {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-10);
+    }
+
+    .featured-image {
+        height: 400px;
+    }
+
+    .featured-title {
+        font-size: var(--text-2xl);
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .quickview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .quickview-image img {
+        height: 500px;
+        max-height: none;
+    }
+
+    .quickview-details {
+        padding: var(--space-8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   Desktop (992px - 1200px)
+   ======================================== */
+@media screen and (min-width: 992px) {
+    .container {
+        padding: 0 var(--space-10);
+    }
+
+    .header-container {
+        padding: 0 var(--space-10);
+    }
+
+    .nav-desktop {
+        position: relative;
+        left: auto;
+        transform: none;
+        top: auto;
+        padding: 0;
+    }
+
+    .nav-list {
+        gap: var(--space-8);
+    }
+
+    .header-actions {
+        gap: var(--space-3);
+    }
+
+    .hero-content {
+        max-width: 700px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-6);
+    }
+
+    .footer {
+        padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .footer-container {
+        padding: 0 var(--space-10);
+    }
+}
+
+/* ========================================
+   Large Desktop (1200px+)
+   ======================================== */
+@media screen and (min-width: 1200px) {
+    :root {
+        --header-height: 80px;
+    }
+
+    .container {
+        padding: 0 var(--space-12);
+    }
+
+    .header-container {
+        padding: 0 var(--space-12);
+    }
+
+    .logo-svg {
+        height: 32px;
+    }
+
+    .nav-list {
+        gap: var(--space-10);
+    }
+
+    .nav-link {
+        font-size: var(--text-base);
+    }
+
+    .hero-content {
+        max-width: 800px;
+    }
+
+    .section-title {
+        font-size: var(--text-4xl);
+    }
+
+    .featured-image {
+        height: 500px;
+    }
+
+    .quickview-content {
+        max-width: 1000px;
+    }
+
+    .quickview-image img {
+        height: 600px;
+    }
+
+    .quickview-details {
+        padding: var(--space-10);
+    }
+
+    .quickview-title {
+        font-size: var(--text-2xl);
+    }
+}
+
+/* ========================================
+   Extra Large Desktop (1400px+)
+   ======================================== */
+@media screen and (min-width: 1400px) {
+    .container {
+        padding: 0 var(--space-16);
+    }
+
+    .header-container {
+        padding: 0 var(--space-16);
+    }
+
+    .footer-container {
+        padding: 0 var(--space-16);
+    }
+
+    .products-grid {
+        gap: var(--space-8);
+    }
+}
+
+/* ========================================
+   Height-based Media Queries
+   For short viewports (laptops, etc.)
+   ======================================== */
+@media screen and (max-height: 700px) {
+    .hero {
+        min-height: auto;
+        padding: var(--space-8) var(--space-4);
+    }
+
+    .hero-image-wrapper {
+        max-height: 70vh;
+    }
+}
+
+/* ========================================
+   Touch Device Optimizations
+   ======================================== */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Disable hover effects that don't work on touch */
+    .product-card:hover .product-image {
+        transform: none;
+    }
+
+    .product-card:hover .product-image-hover {
+        opacity: 0;
+    }
+
+    .product-card:hover .quick-add-btn {
+        opacity: 0;
+    }
+
+    /* Make touch targets larger */
+    .nav-link-mobile {
+        padding: var(--space-5) 0;
+    }
+
+    .action-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .size-btn {
+        min-width: 48px;
+        height: 48px;
+    }
+}
+
+/* ========================================
+   Reduced Motion Preferences
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-image-wrapper:hover .hero-image {
+        transform: none;
+    }
+
+    .product-card:hover .product-image {
+        transform: none;
+    }
+
+    .featured-banner:hover .featured-image {
+        transform: none;
+    }
+}
+
+/* ========================================
+   Dark Mode Support (Optional)
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+    /* Uncomment to enable automatic dark mode
+    :root {
+        --color-primary: #ffffff;
+        --color-primary-rgb: 255, 255, 255;
+        --color-secondary: #121212;
+        --color-accent: #ffffff;
+        --color-text: rgba(255, 255, 255, 0.85);
+        --color-text-light: rgba(255, 255, 255, 0.6);
+        --color-border: rgba(255, 255, 255, 0.12);
+        --color-bg: #121212;
+        --color-bg-secondary: #1a1a1a;
+        --color-footer-bg: #000000;
+        --color-footer-text: #ffffff;
+    }
+
+    .header {
+        background-color: var(--color-bg);
+    }
+
+    .hamburger-line {
+        background-color: var(--color-primary);
+    }
+    */
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+
+    .announcement-bar,
+    .header,
+    .cart-sidebar,
+    .cart-overlay,
+    .search-modal,
+    .quickview-modal,
+    .menu-toggle,
+    .header-actions,
+    .btn {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+
+    .hero-image {
+        max-height: 300pt;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .collection-section {
+        page-break-inside: avoid;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    a[href]::after {
+        content: ' (' attr(href) ')';
+        font-size: 0.8em;
+        color: #666;
+    }
+}
+
+/* ========================================
+   Landscape Orientation Adjustments
+   ======================================== */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .hero {
+        min-height: auto;
+        padding: var(--space-4);
+    }
+
+    .hero-content {
+        max-width: 50vw;
+    }
+
+    .nav-mobile {
+        padding-top: calc(var(--header-height) + var(--space-4));
+    }
+
+    .nav-list-mobile {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
+    .nav-link-mobile {
+        border-bottom: none;
+        padding: var(--space-2) var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+}
+
+/* ========================================
+   High DPI / Retina Adjustments
+   ======================================== */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+    /* Thinner borders on high DPI screens */
+    .hamburger-line {
+        height: 1px;
+    }
+
+    .nav-link::after {
+        height: 0.5px;
+    }
+}

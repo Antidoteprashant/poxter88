@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LBVP - Premium fashion label offering exclusive shirts, pants, and custom-made clothing. Shop the latest collection with free shipping.">
+    <meta name="keywords" content="fashion, clothing, shirts, pants, premium, label, LBVP">
+    <title>LBVP - Premium Fashion Label</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E👔%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <p>Free Shipping on Orders Above ₹999 | Shop Now</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <svg class="logo-svg" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <text x="0" y="30" font-family="Oswald, sans-serif" font-size="32" font-weight="600" fill="currentColor">LBVP</text>
+                </svg>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="nav-desktop" id="navDesktop">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#shirts" class="nav-link">Shirts</a></li>
+                    <li><a href="#pants" class="nav-link">Pants</a></li>
+                    <li><a href="#made-on-order" class="nav-link">Made On Order</a></li>
+                    <li><a href="#sale" class="nav-link">On Sale</a></li>
+                    <li><a href="#track" class="nav-link">Track Your Order</a></li>
+                </ul>
+            </nav>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="action-btn search-btn" id="searchBtn" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="action-btn account-btn" aria-label="Account">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="action-btn cart-btn" id="cartBtn" aria-label="Cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                        <path d="M3 6h18"></path>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="nav-mobile" id="navMobile">
+            <ul class="nav-list-mobile">
+                <li><a href="#home" class="nav-link-mobile">Home</a></li>
+                <li><a href="#shirts" class="nav-link-mobile">Shirts</a></li>
+                <li><a href="#pants" class="nav-link-mobile">Pants</a></li>
+                <li><a href="#made-on-order" class="nav-link-mobile">Made On Order</a></li>
+                <li><a href="#sale" class="nav-link-mobile">On Sale</a></li>
+                <li><a href="#track" class="nav-link-mobile">Track Your Order</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-modal-content">
+            <button class="search-close" id="searchClose" aria-label="Close search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+            </button>
+            <form class="search-form">
+                <input type="text" placeholder="Search our store..." class="search-input" id="searchInput">
+                <button type="submit" class="search-submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="hero-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1200&h=1600&fit=crop" 
+                         alt="Model wearing LBVP premium shirt" 
+                         class="hero-image"
+                         loading="eager">
+                    <a href="#shirts" class="hero-cta">Shop Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shirts Collection Section -->
+        <section class="collection-section" id="shirts">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">SHIRTS</h2>
+                    <p class="section-subtitle">Shop Our Latest Collection</p>
+                </div>
+                
+                <div class="products-grid" id="shirtsGrid">
+                    <!-- Products will be dynamically loaded -->
+                </div>
+                
+                <div class="section-cta">
+                    <a href="#shirts" class="btn btn-primary">View all</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pants Collection Section -->
+        <section class="collection-section" id="pants">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">PANTS</h2>
+                    <p class="section-subtitle">Elevate Your Style</p>
+                </div>
+                
+                <div class="products-grid" id="pantsGrid">
+                    <!-- Products will be dynamically loaded -->
+                </div>
+                
+                <div class="section-cta">
+                    <a href="#pants" class="btn btn-primary">View all</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Made On Order Section -->
+        <section class="collection-section featured-section" id="made-on-order">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">MADE ON ORDER</h2>
+                    <p class="section-subtitle">Custom Tailored Just For You</p>
+                </div>
+                
+                <div class="featured-banner">
+                    <div class="featured-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&h=800&fit=crop" 
+                             alt="Custom tailored clothing" 
+                             class="featured-image"
+                             loading="lazy">
+                    </div>
+                    <div class="featured-content">
+                        <h3 class="featured-title">Get Your Perfect Fit</h3>
+                        <p class="featured-text">Our expert tailors craft each piece to your exact measurements. Experience the luxury of custom-made clothing.</p>
+                        <a href="#made-on-order" class="btn btn-secondary">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- On Sale Section -->
+        <section class="collection-section" id="sale">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">ON SALE</h2>
+                    <p class="section-subtitle">Limited Time Offers</p>
+                </div>
+                
+                <div class="products-grid" id="saleGrid">
+                    <!-- Sale products will be dynamically loaded -->
+                </div>
+                
+                <div class="section-cta">
+                    <a href="#sale" class="btn btn-primary">View all</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="track">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Shop Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">SHOP</h4>
+                    <ul class="footer-links">
+                        <li><a href="#shirts">Shirts</a></li>
+                        <li><a href="#pants">Pants</a></li>
+                        <li><a href="#made-on-order">Made On Order</a></li>
+                        <li><a href="#sale">On Sale</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">LEGAL</h4>
+                    <ul class="footer-links">
+                        <li><a href="#refund">Refund Policy</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#contact">Contact Information</a></li>
+                    </ul>
+                </div>
+
+                <!-- Headquarters -->
+                <div class="footer-column">
+                    <h4 class="footer-title">HEADQUARTERS</h4>
+                    <address class="footer-address">
+                        <p>212, Ranchhodji park 2 Near Rashi circle katargam surat-395004.</p>
+                        <a href="mailto:labelbyvp@gmail.com" class="footer-contact-link">labelbyvp@gmail.com</a>
+                        <a href="tel:+917045632121" class="footer-contact-link">+91 7045632121</a>
+                    </address>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="newsletter-section">
+                <h4 class="newsletter-title">Subscribe to our emails</h4>
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="newsletter-input-wrapper">
+                        <input type="email" placeholder="Email" class="newsletter-input" id="newsletterEmail" required>
+                        <button type="submit" class="newsletter-submit" aria-label="Subscribe">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Social Links -->
+            <div class="social-section">
+                <a href="https://instagram.com/labelbyvp" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026, LBVP</p>
+                <ul class="footer-legal-links">
+                    <li><a href="#privacy">Privacy policy</a></li>
+                    <li><a href="#terms">Terms of service</a></li>
+                    <li><a href="#shipping">Shipping policy</a></li>
+                    <li><a href="#refund">Refund policy</a></li>
+                    <li><a href="#contact">Contact information</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 class="cart-title">Your Cart</h3>
+            <button class="cart-close" id="cartClose" aria-label="Close cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span>Subtotal</span>
+                <span id="cartSubtotal">Rs. 0.00</span>
+            </div>
+            <button class="btn btn-checkout">Checkout</button>
+        </div>
+    </aside>
+
+    <!-- Quick View Modal -->
+    <div class="quickview-modal" id="quickviewModal">
+        <div class="quickview-content">
+            <button class="quickview-close" id="quickviewClose" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+            </button>
+            <div class="quickview-grid">
+                <div class="quickview-image">
+                    <img src="" alt="" id="quickviewImage">
+                </div>
+                <div class="quickview-details">
+                    <h2 class="quickview-title" id="quickviewTitle"></h2>
+                    <p class="quickview-brand">LBVP</p>
+                    <div class="quickview-price" id="quickviewPrice"></div>
+                    <div class="quickview-sizes">
+                        <label class="size-label">Size</label>
+                        <div class="size-options" id="sizeOptions">
+                            <button class="size-btn" data-size="S">S</button>
+                            <button class="size-btn" data-size="M">M</button>
+                            <button class="size-btn active" data-size="L">L</button>
+                            <button class="size-btn" data-size="XL">XL</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-add-to-cart" id="addToCartBtn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
