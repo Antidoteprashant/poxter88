@@ -169,15 +169,18 @@ function showCheckoutForm() {
     const modal = document.getElementById('checkoutModal');
     if (!modal) return;
 
-    // Pre-fill if user is logged in
-    if (userState.isLoggedIn && userState.user) {
-        const fields = ['fullName', 'email', 'phone', 'address', 'city', 'pincode'];
-        fields.forEach(field => {
-            const input = document.getElementById(field);
-            if (input && userState.user[field]) {
-                input.value = userState.user[field];
-            }
-        });
+    // Pre-fill if user is logged in (using new auth system)
+    if (window.poxter88Auth && window.poxter88Auth.isLoggedIn()) {
+        const user = window.poxter88Auth.getCurrentUser();
+        if (user) {
+            const fullNameInput = document.getElementById('fullName');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+
+            if (fullNameInput && user.fullName) fullNameInput.value = user.fullName;
+            if (emailInput && user.email) emailInput.value = user.email;
+            if (phoneInput && user.phone) phoneInput.value = user.phone;
+        }
     }
 
     // Update order summary
@@ -384,8 +387,17 @@ function showOrderSuccess(orderId, email) {
 
 /**
  * Initialize checkout on button click
+ * Requires user to be logged in before proceeding
  */
 function initCheckoutProcess() {
+    // Check if user is logged in first
+    if (window.poxter88Auth && !window.poxter88Auth.isLoggedIn()) {
+        // User not logged in - show login modal with checkout redirect
+        window.poxter88Auth.showAuthModal('login', 'checkout');
+        return;
+    }
+
+    // User is logged in - proceed with validation
     const validation = validateCart();
     showValidationModal(validation);
 }
