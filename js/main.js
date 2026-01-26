@@ -16,13 +16,13 @@ const quickviewClose = document.getElementById('quickviewClose');
 const quickviewImage = document.getElementById('quickviewImage');
 const quickviewTitle = document.getElementById('quickviewTitle');
 const quickviewPrice = document.getElementById('quickviewPrice');
-const sizeOptions = document.getElementById('sizeOptions');
+const quickviewSize = document.getElementById('quickviewSize');
 const addToCartBtn = document.getElementById('addToCartBtn');
 const newsletterForm = document.getElementById('newsletterForm');
 
 // State
 let currentProduct = null;
-let selectedSize = 'L';
+const fixedSize = 'A4'; // Fixed size for all posters
 let lastScrollTop = 0;
 
 /**
@@ -164,24 +164,11 @@ function setupQuickView() {
         });
     }
 
-    // Size selection
-    if (sizeOptions) {
-        sizeOptions.addEventListener('click', (e) => {
-            if (e.target.classList.contains('size-btn')) {
-                sizeOptions.querySelectorAll('.size-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                e.target.classList.add('active');
-                selectedSize = e.target.dataset.size;
-            }
-        });
-    }
-
     // Add to cart from quick view
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
             if (currentProduct && window.lbvpCart) {
-                window.lbvpCart.addToCart(currentProduct, selectedSize);
+                window.lbvpCart.addToCart(currentProduct, fixedSize);
                 closeQuickView();
             }
         });
@@ -196,7 +183,6 @@ function openQuickView(product) {
     if (!quickviewModal || !product) return;
 
     currentProduct = product;
-    selectedSize = product.sizes[Math.floor(product.sizes.length / 2)] || 'L';
 
     // Update modal content
     if (quickviewImage) {
@@ -219,11 +205,9 @@ function openQuickView(product) {
         }
     }
 
-    // Update size buttons
-    if (sizeOptions) {
-        sizeOptions.innerHTML = product.sizes.map(size => `
-            <button class="size-btn ${size === selectedSize ? 'active' : ''}" data-size="${size}">${size}</button>
-        `).join('');
+    // Update fixed size display
+    if (quickviewSize) {
+        quickviewSize.textContent = 'A4';
     }
 
     // Show modal
@@ -284,9 +268,6 @@ function setupIntersectionObserver() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-
-                // Optional: Unobserve after animation
-                // observer.unobserve(entry.target);
             }
         });
     }, observerOptions);

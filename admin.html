@@ -246,14 +246,9 @@
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <path d="m21 21-4.35-4.35"></path>
                                 </svg>
-                                <input type="text" placeholder="Search products..." id="productSearch"
+                                <input type="text" placeholder="Search posters..." id="productSearch"
                                     oninput="filterProducts()">
                             </div>
-                            <select id="categoryFilter" onchange="filterProducts()">
-                                <option value="">All Categories</option>
-                                <option value="shirts">Shirts</option>
-                                <option value="pants">Pants</option>
-                            </select>
                         </div>
                         <div class="table-container">
                             <table class="data-table">
@@ -356,19 +351,9 @@
             </div>
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="hidden" id="productId">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productName">Product Name *</label>
-                        <input type="text" id="productName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productCategory">Category *</label>
-                        <select id="productCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="shirts">Shirts</option>
-                            <option value="pants">Pants</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label for="productName">Poster Name *</label>
+                    <input type="text" id="productName" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -380,15 +365,9 @@
                         <input type="number" id="productOriginalPrice" min="0" step="0.01">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productStock">Stock Quantity *</label>
-                        <input type="number" id="productStock" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productSizes">Available Sizes</label>
-                        <input type="text" id="productSizes" placeholder="S, M, L, XL">
-                    </div>
+                <div class="form-group">
+                    <label for="productStock">Stock Quantity *</label>
+                    <input type="number" id="productStock" min="0" required>
                 </div>
                 <div class="form-group">
                     <label for="productImage">Image URL *</label>
@@ -410,7 +389,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Product</button>
+                    <button type="submit" class="btn btn-primary">Save Poster</button>
                 </div>
             </form>
         </div>

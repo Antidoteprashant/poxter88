@@ -71,17 +71,12 @@ function validateCart() {
             });
         }
 
-        // Check availability (simulated - all items available)
+        // Check availability (all posters have fixed A4 size)
         const product = getProductById(item.id);
         if (!product) {
             errors.push({
                 type: 'unavailable',
                 message: `${item.name} is no longer available`
-            });
-        } else if (!product.sizes.includes(item.size)) {
-            errors.push({
-                type: 'size_unavailable',
-                message: `Size ${item.size} is not available for ${item.name}`
             });
         }
     });

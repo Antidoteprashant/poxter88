@@ -1267,7 +1267,8 @@ address {
 }
 
 /* Size Options */
-.quickview-sizes {
+.quickview-sizes,
+.quickview-size {
     margin-bottom: var(--space-6);
 }
 
@@ -1306,6 +1307,26 @@ address {
     background-color: var(--color-primary);
     color: var(--color-secondary);
     border-color: var(--color-primary);
+}
+
+/* Fixed Size Display (A4) */
+.size-fixed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+}
+
+/* Product Size in Card */
+.product-size {
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-1);
 }
 
 /* ========================================

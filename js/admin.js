@@ -130,7 +130,7 @@ function showSection(sectionName) {
     // Update header
     const titles = {
         overview: { title: 'Dashboard Overview', subtitle: 'Welcome back, Admin' },
-        products: { title: 'Product Management', subtitle: 'Manage your product catalog' },
+        products: { title: 'Poster Management', subtitle: 'Manage your poster catalog' },
         orders: { title: 'Order Management', subtitle: 'Track and manage orders' },
         analytics: { title: 'Analytics', subtitle: 'Business insights and metrics' }
     };
@@ -167,14 +167,14 @@ function loadProducts() {
     if (saved) {
         adminProducts = JSON.parse(saved);
     } else {
-        // Initialize with default products
+        // Initialize with default poster products
         adminProducts = [
-            { id: 'shirt-1', name: 'Blue Label', category: 'shirts', price: 1199, stock: 50, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'S, M, L, XL', description: 'Premium blue label shirt' },
-            { id: 'shirt-2', name: 'Red Label', category: 'shirts', price: 1199, stock: 35, image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'S, M, L, XL, XXL', description: 'Luxurious red label shirt' },
-            { id: 'shirt-3', name: 'Black Label', category: 'shirts', price: 1299, stock: 45, image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'M, L, XL', description: 'Classic black label shirt' },
-            { id: 'pants-1', name: 'Noir Classic Trouser', category: 'pants', price: 1499.25, originalPrice: 1999, stock: 28, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=800&fit=crop', isOnSale: true, isNew: false, sizes: '28, 30, 32, 34, 36', description: 'Classic noir trouser' },
-            { id: 'pants-2', name: 'Espresso Ease Trouser', category: 'pants', price: 1499.25, originalPrice: 1999, stock: 22, image: 'https://images.unsplash.com/photo-1551854838-212c50b4c184?w=600&h=800&fit=crop', isOnSale: true, isNew: false, sizes: '28, 30, 32, 34', description: 'Rich espresso trouser' },
-            { id: 'pants-3', name: 'Forest Green Trouser', category: 'pants', price: 1799, stock: 40, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: '30, 32, 34, 36', description: 'Deep forest green trouser' }
+            { id: 'poster-1', name: 'Urban Skyline', category: 'poster', price: 499, stock: 50, image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'A4', description: 'Stunning urban skyline poster' },
+            { id: 'poster-2', name: 'Ocean Waves', category: 'poster', price: 499, stock: 35, image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Calming ocean waves poster' },
+            { id: 'poster-3', name: 'Mountain Peak', category: 'poster', price: 599, stock: 45, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Majestic mountain peak poster' },
+            { id: 'poster-4', name: 'Abstract Art', category: 'poster', price: 549, stock: 28, image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'A4', description: 'Bold abstract art poster' },
+            { id: 'poster-5', name: 'Vintage Cinema', category: 'poster', price: 499, stock: 22, image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Classic vintage cinema poster' },
+            { id: 'poster-6', name: 'Space Galaxy', category: 'poster', price: 649, stock: 40, image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Mesmerizing space galaxy poster' }
         ];
         saveProducts();
     }
@@ -208,7 +208,7 @@ function renderProducts(filteredProducts = null) {
                 <strong>${product.name}</strong>
                 ${product.isNew ? '<span class="status status-active" style="margin-left:8px;font-size:0.65rem;">NEW</span>' : ''}
             </td>
-            <td style="text-transform:capitalize;">${product.category}</td>
+            <td>Poster</td>
             <td>₹${product.price.toLocaleString('en-IN')}</td>
             <td>${product.stock}</td>
             <td>
@@ -236,16 +236,11 @@ function renderProducts(filteredProducts = null) {
  */
 function filterProducts() {
     const search = document.getElementById('productSearch').value.toLowerCase();
-    const category = document.getElementById('categoryFilter').value;
 
     let filtered = adminProducts;
 
     if (search) {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
-    }
-
-    if (category) {
-        filtered = filtered.filter(p => p.category === category);
     }
 
     renderProducts(filtered);
@@ -265,21 +260,19 @@ function openProductModal(productId = null) {
     if (productId) {
         const product = adminProducts.find(p => p.id === productId);
         if (product) {
-            title.textContent = 'Edit Product';
+            title.textContent = 'Edit Poster';
             document.getElementById('productId').value = product.id;
             document.getElementById('productName').value = product.name;
-            document.getElementById('productCategory').value = product.category;
             document.getElementById('productPrice').value = product.price;
             document.getElementById('productOriginalPrice').value = product.originalPrice || '';
             document.getElementById('productStock').value = product.stock;
-            document.getElementById('productSizes').value = product.sizes || '';
             document.getElementById('productImage').value = product.image;
             document.getElementById('productDescription').value = product.description || '';
             document.getElementById('productOnSale').checked = product.isOnSale;
             document.getElementById('productNew').checked = product.isNew;
         }
     } else {
-        title.textContent = 'Add Product';
+        title.textContent = 'Add Poster';
     }
 
     modal.classList.add('active');
@@ -300,13 +293,13 @@ function saveProduct(e) {
 
     const productId = document.getElementById('productId').value;
     const productData = {
-        id: productId || 'product-' + Date.now(),
+        id: productId || 'poster-' + Date.now(),
         name: document.getElementById('productName').value,
-        category: document.getElementById('productCategory').value,
+        category: 'poster',
         price: parseFloat(document.getElementById('productPrice').value),
         originalPrice: parseFloat(document.getElementById('productOriginalPrice').value) || null,
         stock: parseInt(document.getElementById('productStock').value),
-        sizes: document.getElementById('productSizes').value,
+        sizes: 'A4',
         image: document.getElementById('productImage').value,
         description: document.getElementById('productDescription').value,
         isOnSale: document.getElementById('productOnSale').checked,
@@ -319,11 +312,11 @@ function saveProduct(e) {
         if (index > -1) {
             adminProducts[index] = productData;
         }
-        showNotification('Product updated successfully!', 'success');
+        showNotification('Poster updated successfully!', 'success');
     } else {
         // Add new
         adminProducts.push(productData);
-        showNotification('Product added successfully!', 'success');
+        showNotification('Poster added successfully!', 'success');
     }
 
     saveProducts();
@@ -343,12 +336,12 @@ function editProduct(productId) {
  * Delete Product
  */
 function deleteProduct(productId) {
-    if (confirm('Are you sure you want to delete this product?')) {
+    if (confirm('Are you sure you want to delete this poster?')) {
         adminProducts = adminProducts.filter(p => p.id !== productId);
         saveProducts();
         renderProducts();
         updateStats();
-        showNotification('Product deleted successfully!', 'success');
+        showNotification('Poster deleted successfully!', 'success');
     }
 }
 
@@ -366,7 +359,7 @@ function loadOrders() {
             {
                 id: 'LBVPDEMO001',
                 customer: { fullName: 'Rahul Sharma', email: 'rahul@example.com', phone: '9876543210', address: '123 MG Road', city: 'Mumbai', pincode: '400001' },
-                items: [{ id: 'shirt-1', name: 'Blue Label', size: 'L', quantity: 2, price: 1199, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=800&fit=crop' }],
+                items: [{ id: 'poster-1', name: 'Urban Skyline', size: 'A4', quantity: 2, price: 499, image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop' }],
                 status: 'delivered',
                 paymentStatus: 'paid',
                 paymentMethod: 'upi',
@@ -375,7 +368,7 @@ function loadOrders() {
             {
                 id: 'LBVPDEMO002',
                 customer: { fullName: 'Priya Patel', email: 'priya@example.com', phone: '9876543211', address: '456 Park Street', city: 'Delhi', pincode: '110001' },
-                items: [{ id: 'pants-1', name: 'Noir Classic Trouser', size: '32', quantity: 1, price: 1499.25, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=800&fit=crop' }],
+                items: [{ id: 'poster-3', name: 'Mountain Peak', size: 'A4', quantity: 1, price: 599, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop' }],
                 status: 'shipped',
                 paymentStatus: 'paid',
                 paymentMethod: 'card',
@@ -385,8 +378,8 @@ function loadOrders() {
                 id: 'LBVPDEMO003',
                 customer: { fullName: 'Amit Kumar', email: 'amit@example.com', phone: '9876543212', address: '789 Civil Lines', city: 'Surat', pincode: '395001' },
                 items: [
-                    { id: 'shirt-3', name: 'Black Label', size: 'XL', quantity: 1, price: 1299, image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=600&h=800&fit=crop' },
-                    { id: 'pants-3', name: 'Forest Green Trouser', size: '34', quantity: 1, price: 1799, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=800&fit=crop' }
+                    { id: 'poster-2', name: 'Ocean Waves', size: 'A4', quantity: 1, price: 499, image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop' },
+                    { id: 'poster-4', name: 'Abstract Art', size: 'A4', quantity: 1, price: 549, image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=800&fit=crop' }
                 ],
                 status: 'processing',
                 paymentStatus: 'pending',
@@ -608,21 +601,17 @@ function updateStats() {
  * Generate Charts (Simplified visual representation)
  */
 function generateCharts() {
-    // Category chart
+    // Category chart - now just shows Posters
     const categoryChart = document.getElementById('categoryChart');
-    const shirts = adminProducts.filter(p => p.category === 'shirts').length;
-    const pants = adminProducts.filter(p => p.category === 'pants').length;
-    const total = shirts + pants;
+    const postersCount = adminProducts.length;
 
     categoryChart.innerHTML = `
         <div style="text-align:center;">
             <div style="display:flex;gap:20px;justify-content:center;margin-bottom:16px;">
-                <div style="background:var(--admin-primary);width:60px;height:${shirts / total * 100}px;border-radius:4px;"></div>
-                <div style="background:var(--admin-secondary);width:60px;height:${pants / total * 100}px;border-radius:4px;"></div>
+                <div style="background:var(--admin-primary);width:80px;height:100px;border-radius:4px;"></div>
             </div>
             <div style="display:flex;gap:24px;justify-content:center;font-size:0.875rem;">
-                <span>Shirts: ${shirts}</span>
-                <span>Pants: ${pants}</span>
+                <span>Posters: ${postersCount}</span>
             </div>
         </div>
     `;

@@ -21,15 +21,15 @@
     <link rel="stylesheet" href="css/responsive.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml"
+    <link rel="icon" type="image/svg+xm"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%3C/text%3E%3C/svg%3E">
 </head>
 
 <body>
     <!-- Announcement Bar -->
-    <div class="announcement-bar">
+    <!-- <div class="announcement-bar">
         <p>Free Shipping on Orders Above ₹999 | Shop Now</p>
-    </div>
+    </div> -->
 
     <!-- Header -->
     <header class="header" id="header">
@@ -45,7 +45,7 @@
             <a href="#" class="logo">
                 <svg class="logo-svg" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <text x="0" y="30" font-family="Oswald, sans-serif" font-size="32" font-weight="600"
-                        fill="currentColor">LBVP</text>
+                        fill="currentColor">poxter88</text>
                 </svg>
             </a>
 
@@ -53,10 +53,7 @@
             <nav class="nav-desktop" id="navDesktop">
                 <ul class="nav-list">
                     <li><a href="#home" class="nav-link active">Home</a></li>
-                    <li><a href="#shirts" class="nav-link">Shirts</a></li>
-                    <li><a href="#pants" class="nav-link">Pants</a></li>
-                    <li><a href="#made-on-order" class="nav-link">Made On Order</a></li>
-                    <li><a href="#sale" class="nav-link">On Sale</a></li>
+                    <li><a href="#posters" class="nav-link">Posters</a></li>
                     <li><a href="#track" class="nav-link">Track Your Order</a></li>
                 </ul>
             </nav>
@@ -93,10 +90,7 @@
         <nav class="nav-mobile" id="navMobile">
             <ul class="nav-list-mobile">
                 <li><a href="#home" class="nav-link-mobile">Home</a></li>
-                <li><a href="#shirts" class="nav-link-mobile">Shirts</a></li>
-                <li><a href="#pants" class="nav-link-mobile">Pants</a></li>
-                <li><a href="#made-on-order" class="nav-link-mobile">Made On Order</a></li>
-                <li><a href="#sale" class="nav-link-mobile">On Sale</a></li>
+                <li><a href="#posters" class="nav-link-mobile">Posters</a></li>
                 <li><a href="#track" class="nav-link-mobile">Track Your Order</a></li>
             </ul>
         </nav>
@@ -131,86 +125,27 @@
         <section class="hero" id="home">
             <div class="hero-content">
                 <div class="hero-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1200&h=1600&fit=crop"
-                        alt="Model wearing LBVP premium shirt" class="hero-image" loading="eager">
-                    <a href="#shirts" class="hero-cta">Shop Now</a>
+                    <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&h=1600&fit=crop"
+                        alt="Premium poster collection" class="hero-image" loading="eager">
+                    <a href="#posters" class="hero-cta">Shop Posters</a>
                 </div>
             </div>
         </section>
 
-        <!-- Shirts Collection Section -->
-        <section class="collection-section" id="shirts">
+        <!-- Posters Collection Section -->
+        <section class="collection-section" id="posters">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">SHIRTS</h2>
-                    <p class="section-subtitle">Shop Our Latest Collection</p>
+                    <h2 class="section-title">POSTERS</h2>
+                    <p class="section-subtitle">Premium A4 Art Prints</p>
                 </div>
 
-                <div class="products-grid" id="shirtsGrid">
-                    <!-- Products will be dynamically loaded -->
+                <div class="products-grid" id="postersGrid">
+                    <!-- Poster products will be dynamically loaded -->
                 </div>
 
                 <div class="section-cta">
-                    <a href="#shirts" class="btn btn-primary">View all</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pants Collection Section -->
-        <section class="collection-section" id="pants">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">PANTS</h2>
-                    <p class="section-subtitle">Elevate Your Style</p>
-                </div>
-
-                <div class="products-grid" id="pantsGrid">
-                    <!-- Products will be dynamically loaded -->
-                </div>
-
-                <div class="section-cta">
-                    <a href="#pants" class="btn btn-primary">View all</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Made On Order Section -->
-        <section class="collection-section featured-section" id="made-on-order">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">MADE ON ORDER</h2>
-                    <p class="section-subtitle">Custom Tailored Just For You</p>
-                </div>
-
-                <div class="featured-banner">
-                    <div class="featured-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&h=800&fit=crop"
-                            alt="Custom tailored clothing" class="featured-image" loading="lazy">
-                    </div>
-                    <div class="featured-content">
-                        <h3 class="featured-title">Get Your Perfect Fit</h3>
-                        <p class="featured-text">Our expert tailors craft each piece to your exact measurements.
-                            Experience the luxury of custom-made clothing.</p>
-                        <a href="#made-on-order" class="btn btn-secondary">Order Now</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- On Sale Section -->
-        <section class="collection-section" id="sale">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">ON SALE</h2>
-                    <p class="section-subtitle">Limited Time Offers</p>
-                </div>
-
-                <div class="products-grid" id="saleGrid">
-                    <!-- Sale products will be dynamically loaded -->
-                </div>
-
-                <div class="section-cta">
-                    <a href="#sale" class="btn btn-primary">View all</a>
+                    <a href="#posters" class="btn btn-primary">View all</a>
                 </div>
             </div>
         </section>
@@ -224,10 +159,7 @@
                 <div class="footer-column">
                     <h4 class="footer-title">SHOP</h4>
                     <ul class="footer-links">
-                        <li><a href="#shirts">Shirts</a></li>
-                        <li><a href="#pants">Pants</a></li>
-                        <li><a href="#made-on-order">Made On Order</a></li>
-                        <li><a href="#sale">On Sale</a></li>
+                        <li><a href="#posters">Posters</a></li>
                     </ul>
                 </div>
 
@@ -272,8 +204,8 @@
 
             <!-- Social Links -->
             <div class="social-section">
-                <a href="https://www.instagram.com/poxter88.in?igsh=MTgyemJyZTE3N2pkYg==" class="social-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="Instagram">
+                <a href="https://www.instagram.com/poxter88.in?igsh=MTgyemJyZTE3N2pkYg==" class="social-link"
+                    target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
@@ -346,16 +278,11 @@
                 </div>
                 <div class="quickview-details">
                     <h2 class="quickview-title" id="quickviewTitle"></h2>
-                    <p class="quickview-brand">LBVP</p>
+                    <p class="quickview-brand">POXTER88</p>
                     <div class="quickview-price" id="quickviewPrice"></div>
-                    <div class="quickview-sizes">
+                    <div class="quickview-size">
                         <label class="size-label">Size</label>
-                        <div class="size-options" id="sizeOptions">
-                            <button class="size-btn" data-size="S">S</button>
-                            <button class="size-btn" data-size="M">M</button>
-                            <button class="size-btn active" data-size="L">L</button>
-                            <button class="size-btn" data-size="XL">XL</button>
-                        </div>
+                        <span class="size-fixed" id="quickviewSize">A4</span>
                     </div>
                     <button class="btn btn-add-to-cart" id="addToCartBtn">Add to Cart</button>
                 </div>
