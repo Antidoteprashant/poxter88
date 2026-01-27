@@ -47,6 +47,17 @@ function setupEventListeners() {
         loginForm.addEventListener('submit', handleLogin);
     }
 
+    // Image upload handling
+    const imageFileInput = document.getElementById('productImageFile');
+    if (imageFileInput) {
+        imageFileInput.addEventListener('change', handleImageUpload);
+    }
+
+    const removeImageBtn = document.getElementById('removeImage');
+    if (removeImageBtn) {
+        removeImageBtn.addEventListener('click', clearImagePreview);
+    }
+
     // Navigation
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', (e) => {
@@ -270,9 +281,18 @@ function openProductModal(productId = null) {
             document.getElementById('productDescription').value = product.description || '';
             document.getElementById('productOnSale').checked = product.isOnSale;
             document.getElementById('productNew').checked = product.isNew;
+
+            // Set preview if image exists
+            if (product.image) {
+                const previewImg = document.getElementById('previewImg');
+                const imagePreview = document.getElementById('imagePreview');
+                previewImg.src = product.image;
+                imagePreview.classList.add('active');
+            }
         }
     } else {
         title.textContent = 'Add Poster';
+        clearImagePreview();
     }
 
     modal.classList.add('active');
@@ -323,6 +343,60 @@ function saveProduct(e) {
     renderProducts();
     updateStats();
     closeProductModal();
+    clearImagePreview();
+}
+
+/**
+ * Handle Image Upload
+ */
+function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validation
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedTypes.includes(file.type)) {
+        showNotification('Please upload a valid image (JPG, PNG, or WEBP).', 'error');
+        e.target.value = '';
+        return;
+    }
+
+    if (file.size > maxSize) {
+        showNotification('Image size must be less than 2MB.', 'error');
+        e.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const imageData = event.target.result;
+        document.getElementById('productImage').value = imageData;
+
+        const previewImg = document.getElementById('previewImg');
+        const imagePreview = document.getElementById('imagePreview');
+        previewImg.src = imageData;
+        imagePreview.classList.add('active');
+
+        showNotification('Image uploaded successfully!', 'success');
+    };
+    reader.readAsDataURL(file);
+}
+
+/**
+ * Clear Image Preview
+ */
+function clearImagePreview() {
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const productImage = document.getElementById('productImage');
+    const productImageFile = document.getElementById('productImageFile');
+
+    imagePreview.classList.remove('active');
+    previewImg.src = '';
+    productImage.value = '';
+    if (productImageFile) productImageFile.value = '';
 }
 
 /**
