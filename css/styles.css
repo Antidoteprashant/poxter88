@@ -25,6 +25,7 @@
     /* Typography */
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-display: 'Oswald', 'Helvetica Neue', Arial, sans-serif;
+    --font-serif: 'Playfair Display', serif;
 
     /* Font Sizes */
     --text-xs: 0.6875rem;
@@ -359,7 +360,7 @@ address {
 
 .logo-svg {
     height: 28px;
-    width: auto;
+    width: 150px;
     color: var(--color-primary);
 }
 
