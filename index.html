@@ -292,7 +292,7 @@
     <!-- Validation Modal -->
     <div class="modal validation-modal" id="validationModal">
         <div class="modal-content validation-content">
-            <button class="modal-close" onclick="window.lbvpCheckout.closeValidationModal()" aria-label="Close">
+            <button class="modal-close" onclick="window.poxterCheckout.closeValidationModal()" aria-label="Close">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.5">
                     <path d="M18 6 6 18"></path>
@@ -307,10 +307,10 @@
                 <!-- Dynamic content -->
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="window.lbvpCheckout.closeValidationModal()">Back to
+                <button class="btn btn-secondary" onclick="window.poxterCheckout.closeValidationModal()">Back to
                     Cart</button>
                 <button class="btn btn-primary" id="proceedToCheckout"
-                    onclick="window.lbvpCheckout.showCheckoutForm()">Proceed to Checkout</button>
+                    onclick="window.poxterCheckout.showCheckoutForm()">Proceed to Checkout</button>
             </div>
         </div>
     </div>
@@ -318,7 +318,7 @@
     <!-- Checkout Modal -->
     <div class="modal checkout-modal" id="checkoutModal">
         <div class="modal-content checkout-content">
-            <button class="modal-close" onclick="window.lbvpCheckout.closeCheckoutModal()" aria-label="Close">
+            <button class="modal-close" onclick="window.poxterCheckout.closeCheckoutModal()" aria-label="Close">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.5">
                     <path d="M18 6 6 18"></path>
@@ -337,7 +337,7 @@
                         </div>
                     </div>
                     <div id="formErrors"></div>
-                    <form id="checkoutForm" onsubmit="event.preventDefault(); window.lbvpCheckout.submitOrder();">
+                    <form id="checkoutForm" onsubmit="event.preventDefault(); window.poxterCheckout.submitOrder();">
                         <div class="form-section">
                             <h3>Contact Information</h3>
                             <div class="form-group">

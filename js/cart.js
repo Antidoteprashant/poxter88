@@ -19,7 +19,7 @@ const cartSubtotal = document.getElementById('cartSubtotal');
  * Initialize cart from localStorage
  */
 function initCart() {
-    const savedCart = localStorage.getItem('lbvp_cart');
+    const savedCart = localStorage.getItem('poxter_cart');
     if (savedCart) {
         try {
             cart = JSON.parse(savedCart);
@@ -35,7 +35,7 @@ function initCart() {
  * Save cart to localStorage
  */
 function saveCart() {
-    localStorage.setItem('lbvp_cart', JSON.stringify(cart));
+    localStorage.setItem('poxter_cart', JSON.stringify(cart));
 }
 
 /**
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export functions for use in other scripts
-window.lbvpCart = {
+window.poxterCart = {
     addToCart,
     removeFromCart,
     updateQuantity,

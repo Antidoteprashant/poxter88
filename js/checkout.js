@@ -11,7 +11,7 @@ let userState = {
 
 // Load user state from localStorage
 function loadUserState() {
-    const saved = localStorage.getItem('lbvp_user');
+    const saved = localStorage.getItem('poxter_user');
     if (saved) {
         try {
             userState = JSON.parse(saved);
@@ -23,7 +23,7 @@ function loadUserState() {
 
 // Save user state
 function saveUserState() {
-    localStorage.setItem('lbvp_user', JSON.stringify(userState));
+    localStorage.setItem('poxter_user', JSON.stringify(userState));
 }
 
 /**
@@ -35,7 +35,7 @@ function validateCart() {
     const warnings = [];
 
     // Get current cart
-    const cartItems = JSON.parse(localStorage.getItem('lbvp_cart') || '[]');
+    const cartItems = JSON.parse(localStorage.getItem('poxter_cart') || '[]');
 
     // Check if cart is empty
     if (cartItems.length === 0) {
@@ -208,7 +208,7 @@ function updateOrderSummary() {
     const summaryEl = document.getElementById('orderSummary');
     if (!summaryEl) return;
 
-    const cartItems = JSON.parse(localStorage.getItem('lbvp_cart') || '[]');
+    const cartItems = JSON.parse(localStorage.getItem('poxter_cart') || '[]');
     const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const shipping = subtotal >= 999 ? 0 : 99;
     const total = subtotal + shipping;
@@ -319,25 +319,25 @@ function submitOrder() {
     // Simulate order processing
     setTimeout(() => {
         // Generate order ID
-        const orderId = 'LBVP' + Date.now().toString(36).toUpperCase();
+        const orderId = 'poxter' + Date.now().toString(36).toUpperCase();
 
         // Save order to localStorage
         const order = {
             id: orderId,
-            items: JSON.parse(localStorage.getItem('lbvp_cart') || '[]'),
+            items: JSON.parse(localStorage.getItem('poxter_cart') || '[]'),
             customer: validation.data,
             status: 'confirmed',
             date: new Date().toISOString()
         };
 
-        const orders = JSON.parse(localStorage.getItem('lbvp_orders') || '[]');
+        const orders = JSON.parse(localStorage.getItem('poxter_orders') || '[]');
         orders.push(order);
-        localStorage.setItem('lbvp_orders', JSON.stringify(orders));
+        localStorage.setItem('poxter_orders', JSON.stringify(orders));
 
         // Clear cart
-        localStorage.setItem('lbvp_cart', '[]');
-        if (window.lbvpCart) {
-            window.lbvpCart.clearCart();
+        localStorage.setItem('poxter_cart', '[]');
+        if (window.poxterCart) {
+            window.poxterCart.clearCart();
         }
 
         // Show success
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export
-window.lbvpCheckout = {
+window.poxterCheckout = {
     initCheckoutProcess,
     showCheckoutForm,
     closeCheckoutModal,

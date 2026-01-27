@@ -167,8 +167,8 @@ function setupQuickView() {
     // Add to cart from quick view
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
-            if (currentProduct && window.lbvpCart) {
-                window.lbvpCart.addToCart(currentProduct, fixedSize);
+            if (currentProduct && window.poxterCart) {
+                window.poxterCart.addToCart(currentProduct, fixedSize);
                 closeQuickView();
             }
         });
@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export utilities
-window.lbvpApp = {
+window.poxterApp = {
     openQuickView,
     closeQuickView,
     showNotification,

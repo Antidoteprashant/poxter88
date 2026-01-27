@@ -431,8 +431,8 @@ function handleLogin(e) {
             if (redirectAction === 'checkout') {
                 sessionStorage.removeItem('auth_redirect_after');
                 // Proceed to checkout
-                if (window.lbvpCheckout) {
-                    window.lbvpCheckout.initCheckoutProcess();
+                if (window.poxterCheckout) {
+                    window.poxterCheckout.initCheckoutProcess();
                 }
             }
         } else {
@@ -503,8 +503,8 @@ function handleSignup(e) {
             if (redirectAction === 'checkout') {
                 sessionStorage.removeItem('auth_redirect_after');
                 // Proceed to checkout
-                if (window.lbvpCheckout) {
-                    window.lbvpCheckout.initCheckoutProcess();
+                if (window.poxterCheckout) {
+                    window.poxterCheckout.initCheckoutProcess();
                 }
             }
         } else {

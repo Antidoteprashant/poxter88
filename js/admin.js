@@ -24,7 +24,7 @@ const loginForm = document.getElementById('loginForm');
  */
 function initAdmin() {
     // Check if already logged in
-    const session = sessionStorage.getItem('lbvp_admin_session');
+    const session = sessionStorage.getItem('poxter_admin_session');
     if (session) {
         isAuthenticated = true;
         showDashboard();
@@ -88,7 +88,7 @@ function handleLogin(e) {
 
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
         isAuthenticated = true;
-        sessionStorage.setItem('lbvp_admin_session', 'true');
+        sessionStorage.setItem('poxter_admin_session', 'true');
         showDashboard();
     } else {
         showNotification('Invalid credentials. Please try again.', 'error');
@@ -100,7 +100,7 @@ function handleLogin(e) {
  */
 function logout() {
     isAuthenticated = false;
-    sessionStorage.removeItem('lbvp_admin_session');
+    sessionStorage.removeItem('poxter_admin_session');
     loginScreen.style.display = 'flex';
     dashboard.style.display = 'none';
 }
@@ -174,7 +174,7 @@ function updateTime() {
  */
 function loadProducts() {
     // Load from localStorage or use defaults
-    const saved = localStorage.getItem('lbvp_admin_products');
+    const saved = localStorage.getItem('poxter_admin_products');
     if (saved) {
         adminProducts = JSON.parse(saved);
     } else {
@@ -197,7 +197,7 @@ function loadProducts() {
  * Save Products
  */
 function saveProducts() {
-    localStorage.setItem('lbvp_admin_products', JSON.stringify(adminProducts));
+    localStorage.setItem('poxter_admin_products', JSON.stringify(adminProducts));
 }
 
 /**
@@ -424,14 +424,14 @@ function deleteProduct(productId) {
  */
 function loadOrders() {
     // Load from localStorage
-    const saved = localStorage.getItem('lbvp_orders');
+    const saved = localStorage.getItem('poxter_orders');
     adminOrders = saved ? JSON.parse(saved) : [];
 
     // Add some demo orders if empty
     if (adminOrders.length === 0) {
         adminOrders = [
             {
-                id: 'LBVPDEMO001',
+                id: 'poxterDEMO001',
                 customer: { fullName: 'Rahul Sharma', email: 'rahul@example.com', phone: '9876543210', address: '123 MG Road', city: 'Mumbai', pincode: '400001' },
                 items: [{ id: 'poster-1', name: 'Urban Skyline', size: 'A4', quantity: 2, price: 499, image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop' }],
                 status: 'delivered',
@@ -440,7 +440,7 @@ function loadOrders() {
                 date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
             },
             {
-                id: 'LBVPDEMO002',
+                id: 'poxterDEMO002',
                 customer: { fullName: 'Priya Patel', email: 'priya@example.com', phone: '9876543211', address: '456 Park Street', city: 'Delhi', pincode: '110001' },
                 items: [{ id: 'poster-3', name: 'Mountain Peak', size: 'A4', quantity: 1, price: 599, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop' }],
                 status: 'shipped',
@@ -449,7 +449,7 @@ function loadOrders() {
                 date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
             },
             {
-                id: 'LBVPDEMO003',
+                id: 'poxterDEMO003',
                 customer: { fullName: 'Amit Kumar', email: 'amit@example.com', phone: '9876543212', address: '789 Civil Lines', city: 'Surat', pincode: '395001' },
                 items: [
                     { id: 'poster-2', name: 'Ocean Waves', size: 'A4', quantity: 1, price: 499, image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop' },
@@ -461,7 +461,7 @@ function loadOrders() {
                 date: new Date().toISOString()
             }
         ];
-        localStorage.setItem('lbvp_orders', JSON.stringify(adminOrders));
+        localStorage.setItem('poxter_orders', JSON.stringify(adminOrders));
     }
 
     renderOrders();
@@ -645,7 +645,7 @@ function updateOrderStatus(orderId, newStatus) {
         if (newStatus === 'delivered') {
             order.paymentStatus = 'paid';
         }
-        localStorage.setItem('lbvp_orders', JSON.stringify(adminOrders));
+        localStorage.setItem('poxter_orders', JSON.stringify(adminOrders));
         renderRecentOrders();
         showNotification('Order status updated!', 'success');
     }
