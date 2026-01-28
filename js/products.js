@@ -173,6 +173,9 @@ function createProductCard(product) {
     `;
 }
 
+// Global state to store all loaded products from various sources
+let loadedProductsList = [];
+
 /**
  * Render products to a grid
  * @param {string} gridId - ID of the grid element
@@ -183,7 +186,7 @@ async function renderProducts(gridId, productList, limit = null) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
 
-    let itemsToRender = productList;
+    let itemsToRender = [...productList]; // Default to provided list
 
     try {
         // Try fetching from Supabase
@@ -196,10 +199,25 @@ async function renderProducts(gridId, productList, limit = null) {
         if (data && data.length > 0) {
             itemsToRender = data;
             console.log('Fetched products from Supabase');
+        } else {
+            // Check localStorage if Supabase returns nothing
+            const saved = localStorage.getItem('poxter_admin_products');
+            if (saved) {
+                itemsToRender = JSON.parse(saved);
+                console.log('Using products from localStorage fallback');
+            }
         }
     } catch (err) {
-        console.warn('Could not fetch products from Supabase, using fallback data:', err.message);
+        console.warn('Could not fetch products from Supabase, using localStorage or fallback data:', err.message);
+        const saved = localStorage.getItem('poxter_admin_products');
+        if (saved) {
+            itemsToRender = JSON.parse(saved);
+            console.log('Using products from localStorage fallback');
+        }
     }
+
+    // Update global state
+    loadedProductsList = itemsToRender;
 
     const productsToRender = limit ? itemsToRender.slice(0, limit) : itemsToRender;
     grid.innerHTML = productsToRender.map(product => createProductCard(product)).join('');
@@ -214,11 +232,14 @@ async function renderProducts(gridId, productList, limit = null) {
  * @returns {Object|null} Product object or null
  */
 function getProductById(productId) {
-    return products.posters.find(p => p.id === productId) || null;
+    // First search in dynamically loaded list, then fallback to initial list
+    return loadedProductsList.find(p => p.id === productId) ||
+        products.posters.find(p => p.id === productId) ||
+        null;
 }
 
 // Initialize products on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    // Render posters
-    await renderProducts('postersGrid', products.posters, 8);
+    // Render posters - Removed the limit of 8 to show all products
+    await renderProducts('postersGrid', products.posters);
 });
