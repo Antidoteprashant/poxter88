@@ -172,22 +172,29 @@ function updateTime() {
 /**
  * Load Products
  */
-function loadProducts() {
-    // Load from localStorage or use defaults
-    const saved = localStorage.getItem('poxter_admin_products');
-    if (saved) {
-        adminProducts = JSON.parse(saved);
-    } else {
-        // Initialize with default poster products
-        adminProducts = [
-            { id: 'poster-1', name: 'Urban Skyline', category: 'poster', price: 499, stock: 50, image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'A4', description: 'Stunning urban skyline poster' },
-            { id: 'poster-2', name: 'Ocean Waves', category: 'poster', price: 499, stock: 35, image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Calming ocean waves poster' },
-            { id: 'poster-3', name: 'Mountain Peak', category: 'poster', price: 599, stock: 45, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Majestic mountain peak poster' },
-            { id: 'poster-4', name: 'Abstract Art', category: 'poster', price: 549, stock: 28, image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'A4', description: 'Bold abstract art poster' },
-            { id: 'poster-5', name: 'Vintage Cinema', category: 'poster', price: 499, stock: 22, image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Classic vintage cinema poster' },
-            { id: 'poster-6', name: 'Space Galaxy', category: 'poster', price: 649, stock: 40, image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Mesmerizing space galaxy poster' }
-        ];
-        saveProducts();
+async function loadProducts() {
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('products')
+            .select('*');
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            adminProducts = data;
+            console.log('Loaded products from Supabase');
+        } else {
+            // Use defaults if empty
+            adminProducts = [
+                { id: 'poster-1', name: 'Urban Skyline', category: 'poster', price: 499, stock: 50, image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop', isOnSale: false, isNew: true, sizes: 'A4', description: 'Stunning urban skyline poster' },
+                { id: 'poster-2', name: 'Ocean Waves', category: 'poster', price: 499, stock: 35, image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Calming ocean waves poster' },
+                { id: 'poster-3', name: 'Mountain Peak', category: 'poster', price: 599, stock: 45, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop', isOnSale: false, isNew: false, sizes: 'A4', description: 'Majestic mountain peak poster' }
+            ];
+        }
+    } catch (err) {
+        console.warn('Could not load products from Supabase, using localStorage fallback:', err.message);
+        const saved = localStorage.getItem('poxter_admin_products');
+        if (saved) adminProducts = JSON.parse(saved);
     }
 
     renderProducts();
@@ -308,39 +315,57 @@ function closeProductModal() {
 /**
  * Save Product
  */
-function saveProduct(e) {
+async function saveProduct(e) {
     e.preventDefault();
 
     const productId = document.getElementById('productId').value;
     const productData = {
-        id: productId || 'poster-' + Date.now(),
         name: document.getElementById('productName').value,
         category: 'poster',
         price: parseFloat(document.getElementById('productPrice').value),
         originalPrice: parseFloat(document.getElementById('productOriginalPrice').value) || null,
         stock: parseInt(document.getElementById('productStock').value),
-        sizes: 'A4',
+        sizes: ['A4'],
         image: document.getElementById('productImage').value,
         description: document.getElementById('productDescription').value,
         isOnSale: document.getElementById('productOnSale').checked,
         isNew: document.getElementById('productNew').checked
     };
 
-    if (productId) {
-        // Update existing
-        const index = adminProducts.findIndex(p => p.id === productId);
-        if (index > -1) {
-            adminProducts[index] = productData;
+    try {
+        if (productId) {
+            // Update existing in Supabase
+            const { error } = await window.supabaseClient
+                .from('products')
+                .update(productData)
+                .eq('id', productId);
+
+            if (error) throw error;
+            showNotification('Poster updated successfully!', 'success');
+        } else {
+            // Add new to Supabase
+            const { error } = await window.supabaseClient
+                .from('products')
+                .insert([{ ...productData, id: 'poster-' + Date.now() }]);
+
+            if (error) throw error;
+            showNotification('Poster added successfully!', 'success');
         }
-        showNotification('Poster updated successfully!', 'success');
-    } else {
-        // Add new
-        adminProducts.push(productData);
-        showNotification('Poster added successfully!', 'success');
+    } catch (err) {
+        console.error('Error saving product to Supabase:', err);
+        showNotification('Error saving to Supabase. Updating local state.', 'error');
+
+        // Fallback: update local array
+        if (productId) {
+            const index = adminProducts.findIndex(p => p.id === productId);
+            if (index > -1) adminProducts[index] = { ...productData, id: productId };
+        } else {
+            adminProducts.push({ ...productData, id: 'poster-' + Date.now() });
+        }
+        saveProducts();
     }
 
-    saveProducts();
-    renderProducts();
+    await loadProducts(); // Reload from Supabase
     updateStats();
     closeProductModal();
     clearImagePreview();
@@ -409,13 +434,24 @@ function editProduct(productId) {
 /**
  * Delete Product
  */
-function deleteProduct(productId) {
+async function deleteProduct(productId) {
     if (confirm('Are you sure you want to delete this poster?')) {
-        adminProducts = adminProducts.filter(p => p.id !== productId);
-        saveProducts();
-        renderProducts();
+        try {
+            const { error } = await window.supabaseClient
+                .from('products')
+                .delete()
+                .eq('id', productId);
+
+            if (error) throw error;
+            showNotification('Poster deleted successfully!', 'success');
+        } catch (err) {
+            console.error('Error deleting product from Supabase:', err);
+            adminProducts = adminProducts.filter(p => p.id !== productId);
+            saveProducts();
+            showNotification('Deleted from local state.', 'info');
+        }
+        await loadProducts();
         updateStats();
-        showNotification('Poster deleted successfully!', 'success');
     }
 }
 

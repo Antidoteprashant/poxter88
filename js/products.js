@@ -179,11 +179,29 @@ function createProductCard(product) {
  * @param {Array} productList - Array of product objects
  * @param {number} limit - Optional limit of products to show
  */
-function renderProducts(gridId, productList, limit = null) {
+async function renderProducts(gridId, productList, limit = null) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
 
-    const productsToRender = limit ? productList.slice(0, limit) : productList;
+    let itemsToRender = productList;
+
+    try {
+        // Try fetching from Supabase
+        const { data, error } = await window.supabaseClient
+            .from('products')
+            .select('*');
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            itemsToRender = data;
+            console.log('Fetched products from Supabase');
+        }
+    } catch (err) {
+        console.warn('Could not fetch products from Supabase, using fallback data:', err.message);
+    }
+
+    const productsToRender = limit ? itemsToRender.slice(0, limit) : itemsToRender;
     grid.innerHTML = productsToRender.map(product => createProductCard(product)).join('');
 
     // Add stagger animation class
@@ -200,6 +218,7 @@ function getProductById(productId) {
 }
 
 // Initialize products on page load
-document.addEventListener('DOMContentLoaded', () => {
-    renderProducts('postersGrid', products.posters, 8);
+document.addEventListener('DOMContentLoaded', async () => {
+    // Render posters
+    await renderProducts('postersGrid', products.posters, 8);
 });

@@ -316,33 +316,46 @@ function submitOrder() {
         submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
     }
 
-    // Simulate order processing
-    setTimeout(() => {
-        // Generate order ID
-        const orderId = 'poxter' + Date.now().toString(36).toUpperCase();
+    // Submit to Supabase
+    (async () => {
+        try {
+            // Generate order ID
+            const orderId = 'poxter' + Date.now().toString(36).toUpperCase();
 
-        // Save order to localStorage
-        const order = {
-            id: orderId,
-            items: JSON.parse(localStorage.getItem('poxter_cart') || '[]'),
-            customer: validation.data,
-            status: 'confirmed',
-            date: new Date().toISOString()
-        };
+            // Prepare order data
+            const order = {
+                id: orderId,
+                items: JSON.parse(localStorage.getItem('poxter_cart') || '[]'),
+                customer: validation.data,
+                status: 'confirmed',
+                date: new Date().toISOString(),
+                total_amount: validation.data.total // Assumes total is passed or calculated
+            };
 
-        const orders = JSON.parse(localStorage.getItem('poxter_orders') || '[]');
-        orders.push(order);
-        localStorage.setItem('poxter_orders', JSON.stringify(orders));
+            const { error } = await window.supabaseClient
+                .from('orders')
+                .insert([order]);
 
-        // Clear cart
-        localStorage.setItem('poxter_cart', '[]');
-        if (window.poxterCart) {
-            window.poxterCart.clearCart();
+            if (error) throw error;
+
+            // Clear cart
+            localStorage.setItem('poxter_cart', '[]');
+            if (window.poxterCart) {
+                window.poxterCart.clearCart();
+            }
+
+            // Show success
+            showOrderSuccess(orderId, validation.data.email);
+        } catch (err) {
+            console.error('Error submitting order to Supabase:', err);
+            showFormErrors(['Failed to place order. Please try again.']);
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Place Order';
+            }
         }
-
-        // Show success
-        showOrderSuccess(orderId, validation.data.email);
-    }, 2000);
+    })();
 }
 
 /**

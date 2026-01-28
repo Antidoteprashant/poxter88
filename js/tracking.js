@@ -261,8 +261,47 @@ function handleTrackingSubmit(e) {
 }
 
 // Find order by ID or tracking number
-function findOrder(query) {
-    // Direct match
+async function findOrder(query) {
+    try {
+        // Try fetching from Supabase first
+        const { data, error } = await window.supabaseClient
+            .from('orders')
+            .select('*')
+            .or(`id.eq.${query},awb.eq.${query}`);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            // Transform Supabase data if necessary to match the UI expectations
+            const order = data[0];
+            return {
+                orderId: order.id,
+                status: order.status,
+                statusText: order.status.charAt(0).toUpperCase() + order.status.slice(1),
+                progress: getProgressFromStatus(order.status),
+                estimatedDelivery: new Date(order.estimated_delivery || Date.now() + 3 * 24 * 60 * 60 * 1000),
+                customer: {
+                    name: order.customer.fullName || order.customer.name,
+                    phone: order.customer.phone,
+                    address: order.customer.address
+                },
+                product: order.items[0], // Assuming first item for summary
+                courier: {
+                    name: order.courier_name || 'BlueDart Express',
+                    awb: order.awb || 'Pending',
+                    trackingUrl: order.tracking_url || '#'
+                },
+                timeline: order.timeline || [
+                    { status: 'Order Placed', description: 'Your order has been successfully placed', time: new Date(order.date).toLocaleString(), completed: true }
+                ],
+                updates: order.updates || []
+            };
+        }
+    } catch (err) {
+        console.warn('Supabase fetch failed, checking sample data:', err.message);
+    }
+
+    // Fallback to sample data
     if (sampleOrders[query]) {
         return sampleOrders[query];
     }
@@ -275,6 +314,19 @@ function findOrder(query) {
     }
 
     return null;
+}
+
+// Helper to get progress percentage
+function getProgressFromStatus(status) {
+    const progressMap = {
+        'confirmed': 10,
+        'processing': 30,
+        'printed': 50,
+        'shipped': 70,
+        'out_for_delivery': 90,
+        'delivered': 100
+    };
+    return progressMap[status] || 0;
 }
 
 // Display order details

@@ -9,24 +9,28 @@ const authState = {
     user: null
 };
 
-// Load auth state from localStorage
-function loadAuthState() {
-    const saved = localStorage.getItem('poxter88_auth');
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            authState.isLoggedIn = parsed.isLoggedIn || false;
-            authState.user = parsed.user || null;
-            updateAuthUI();
-        } catch (e) {
-            console.error('Error loading auth state:', e);
-        }
-    }
-}
+// Load auth state from Supabase
+async function loadAuthState() {
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
 
-// Save auth state
-function saveAuthState() {
-    localStorage.setItem('poxter88_auth', JSON.stringify(authState));
+    if (error) {
+        console.error('Error loading auth state:', error);
+        return;
+    }
+
+    if (session) {
+        authState.isLoggedIn = true;
+        authState.user = {
+            id: session.user.id,
+            fullName: session.user.user_metadata.full_name || 'User',
+            email: session.user.email,
+            phone: session.user.user_metadata.phone || ''
+        };
+    } else {
+        authState.isLoggedIn = false;
+        authState.user = null;
+    }
+    updateAuthUI();
 }
 
 // Check if user is logged in
@@ -39,96 +43,80 @@ function getCurrentUser() {
     return authState.user;
 }
 
-// Get stored users (simulated database)
-function getStoredUsers() {
-    const users = localStorage.getItem('poxter88_users');
-    return users ? JSON.parse(users) : [];
-}
-
-// Save users to storage
-function saveUsers(users) {
-    localStorage.setItem('poxter88_users', JSON.stringify(users));
-}
-
 /**
  * Sign up new user
  */
-function signUp(userData) {
-    const users = getStoredUsers();
+async function signUp(userData) {
+    try {
+        const { data, error } = await window.supabaseClient.auth.signUp({
+            email: userData.email,
+            password: userData.password,
+            options: {
+                data: {
+                    full_name: userData.fullName,
+                    phone: userData.phone
+                }
+            }
+        });
 
-    // Check if email already exists
-    if (users.find(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
-        return { success: false, error: 'Email already registered. Please login.' };
+        if (error) throw error;
+
+        if (data.user) {
+            authState.isLoggedIn = true;
+            authState.user = {
+                id: data.user.id,
+                fullName: userData.fullName,
+                email: data.user.email,
+                phone: userData.phone
+            };
+            updateAuthUI();
+            return { success: true, user: authState.user };
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        return { success: false, error: error.message };
     }
-
-    // Check if phone already exists
-    if (users.find(u => u.phone === userData.phone)) {
-        return { success: false, error: 'Phone number already registered.' };
-    }
-
-    // Create new user
-    const newUser = {
-        id: 'USR' + Date.now().toString(36).toUpperCase(),
-        fullName: userData.fullName,
-        email: userData.email.toLowerCase(),
-        phone: userData.phone,
-        password: btoa(userData.password), // Simple encoding (use proper hashing in production)
-        createdAt: new Date().toISOString()
-    };
-
-    users.push(newUser);
-    saveUsers(users);
-
-    // Auto-login after signup
-    authState.isLoggedIn = true;
-    authState.user = {
-        id: newUser.id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        phone: newUser.phone
-    };
-    saveAuthState();
-    updateAuthUI();
-
-    return { success: true, user: authState.user };
 }
 
 /**
  * Login user
  */
-function login(email, password) {
-    const users = getStoredUsers();
+async function login(email, password) {
+    try {
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
 
-    const user = users.find(u =>
-        u.email.toLowerCase() === email.toLowerCase() &&
-        u.password === btoa(password)
-    );
+        if (error) throw error;
 
-    if (!user) {
-        return { success: false, error: 'Invalid email or password.' };
+        if (data.user) {
+            authState.isLoggedIn = true;
+            authState.user = {
+                id: data.user.id,
+                fullName: data.user.user_metadata.full_name || 'User',
+                email: data.user.email,
+                phone: data.user.user_metadata.phone || ''
+            };
+            updateAuthUI();
+            return { success: true, user: authState.user };
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, error: error.message };
     }
-
-    // Set auth state
-    authState.isLoggedIn = true;
-    authState.user = {
-        id: user.id,
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone
-    };
-    saveAuthState();
-    updateAuthUI();
-
-    return { success: true, user: authState.user };
 }
 
 /**
  * Logout user
  */
-function logout() {
+async function logout() {
+    const { error } = await window.supabaseClient.auth.signOut();
+    if (error) {
+        console.error('Logout error:', error);
+    }
     authState.isLoggedIn = false;
     authState.user = null;
-    saveAuthState();
     updateAuthUI();
     showAuthNotification('Logged out successfully', 'success');
 }
@@ -395,7 +383,7 @@ function togglePasswordVisibility(inputId, btn) {
 /**
  * Handle login form submission
  */
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
 
     const email = document.getElementById('loginEmail').value.trim();
@@ -418,9 +406,8 @@ function handleLogin(e) {
         submitBtn.innerHTML = '<span class="spinner"></span> Logging in...';
     }
 
-    // Simulate API delay
-    setTimeout(() => {
-        const result = login(email, password);
+    try {
+        const result = await login(email, password);
 
         if (result.success) {
             showAuthNotification(`Welcome back, ${result.user.fullName}!`, 'success');
@@ -438,18 +425,21 @@ function handleLogin(e) {
         } else {
             if (errorEl) errorEl.textContent = result.error;
         }
-
+    } catch (err) {
+        console.error('Login error:', err);
+        if (errorEl) errorEl.textContent = 'An error occurred during login.';
+    } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Login';
         }
-    }, 1000);
+    }
 }
 
 /**
  * Handle signup form submission
  */
-function handleSignup(e) {
+async function handleSignup(e) {
     e.preventDefault();
 
     const fullName = document.getElementById('signupName').value.trim();
@@ -490,9 +480,8 @@ function handleSignup(e) {
         submitBtn.innerHTML = '<span class="spinner"></span> Creating account...';
     }
 
-    // Simulate API delay
-    setTimeout(() => {
-        const result = signUp({ fullName, email, phone, password });
+    try {
+        const result = await signUp({ fullName, email, phone, password });
 
         if (result.success) {
             showAuthNotification(`Welcome, ${result.user.fullName}! Your account has been created.`, 'success');
@@ -510,12 +499,15 @@ function handleSignup(e) {
         } else {
             if (errorEl) errorEl.textContent = result.error;
         }
-
+    } catch (err) {
+        console.error('Signup error:', err);
+        if (errorEl) errorEl.textContent = 'An error occurred during signup.';
+    } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Create Account';
         }
-    }, 1000);
+    }
 }
 
 /**
