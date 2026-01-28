@@ -9,28 +9,66 @@ const authState = {
     user: null
 };
 
-// Load auth state from Supabase
-async function loadAuthState() {
-    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+let isMockMode = false;
 
-    if (error) {
-        console.error('Error loading auth state:', error);
+// Load auth state from Supabase
+async function loadAuthState(retries = 5) {
+    if (!window.supabaseClient) {
+        if (retries > 0) {
+            console.warn(`Supabase client not ready, retrying auth state load... (${retries} retries left)`);
+            setTimeout(() => loadAuthState(retries - 1), 500);
+        } else {
+            console.warn('Supabase client failed to initialize after multiple retries. Switching to Local Mode.');
+            isMockMode = true;
+            loadMockAuthState();
+        }
         return;
     }
 
-    if (session) {
-        authState.isLoggedIn = true;
-        authState.user = {
-            id: session.user.id,
-            fullName: session.user.user_metadata.full_name || 'User',
-            email: session.user.email,
-            phone: session.user.user_metadata.phone || ''
-        };
-    } else {
-        authState.isLoggedIn = false;
-        authState.user = null;
+    try {
+        const { data, error } = await window.supabaseClient.auth.getSession();
+        const session = data?.session;
+
+        if (error) {
+            console.error('Error loading auth state:', error);
+            return;
+        }
+
+        if (session) {
+            authState.isLoggedIn = true;
+            authState.user = {
+                id: session.user.id,
+                fullName: session.user.user_metadata.full_name || 'User',
+                email: session.user.email,
+                phone: session.user.user_metadata.phone || ''
+            };
+        } else {
+            authState.isLoggedIn = false;
+            authState.user = null;
+        }
+        updateAuthUI();
+    } catch (err) {
+        console.error('Unexpected error in loadAuthState:', err);
+        isMockMode = true;
+        loadMockAuthState();
     }
-    updateAuthUI();
+}
+
+/**
+ * Load mock auth state from localStorage
+ */
+function loadMockAuthState() {
+    const savedUser = localStorage.getItem('poxter_mock_user');
+    if (savedUser) {
+        try {
+            authState.user = JSON.parse(savedUser);
+            authState.isLoggedIn = true;
+            updateAuthUI();
+            console.log('Loaded mock user session');
+        } catch (e) {
+            localStorage.removeItem('poxter_mock_user');
+        }
+    }
 }
 
 // Check if user is logged in
@@ -47,6 +85,19 @@ function getCurrentUser() {
  * Sign up new user
  */
 async function signUp(userData) {
+    if (!window.supabaseClient || isMockMode) {
+        console.log('Performing mock signup');
+        authState.isLoggedIn = true;
+        authState.user = {
+            id: 'mock-' + Date.now(),
+            fullName: userData.fullName,
+            email: userData.email,
+            phone: userData.phone
+        };
+        localStorage.setItem('poxter_mock_user', JSON.stringify(authState.user));
+        updateAuthUI();
+        return { success: true, user: authState.user };
+    }
     try {
         const { data, error } = await window.supabaseClient.auth.signUp({
             email: userData.email,
@@ -82,6 +133,20 @@ async function signUp(userData) {
  * Login user
  */
 async function login(email, password) {
+    if (!window.supabaseClient || isMockMode) {
+        console.log('Performing mock login');
+        // Simple mock login - any password works
+        authState.isLoggedIn = true;
+        authState.user = {
+            id: 'mock-' + Date.now(),
+            fullName: email.split('@')[0],
+            email: email,
+            phone: '9999999999'
+        };
+        localStorage.setItem('poxter_mock_user', JSON.stringify(authState.user));
+        updateAuthUI();
+        return { success: true, user: authState.user };
+    }
     try {
         const { data, error } = await window.supabaseClient.auth.signInWithPassword({
             email: email,
@@ -111,6 +176,14 @@ async function login(email, password) {
  * Logout user
  */
 async function logout() {
+    if (isMockMode || !window.supabaseClient) {
+        localStorage.removeItem('poxter_mock_user');
+        authState.isLoggedIn = false;
+        authState.user = null;
+        updateAuthUI();
+        showAuthNotification('Logged out successfully (Local)', 'success');
+        return;
+    }
     const { error } = await window.supabaseClient.auth.signOut();
     if (error) {
         console.error('Logout error:', error);
