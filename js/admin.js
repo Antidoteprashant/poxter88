@@ -379,7 +379,7 @@ function handleImageUpload(e) {
     if (!file) return;
 
     // Validation
-    const maxSize = 2 * 1024 * 1024; // 2MB
+    const maxSize = 5 * 1024 * 1024; // 5MB
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!allowedTypes.includes(file.type)) {
@@ -389,7 +389,7 @@ function handleImageUpload(e) {
     }
 
     if (file.size > maxSize) {
-        showNotification('Image size must be less than 2MB.', 'error');
+        showNotification('Image size must be less than 5MB.', 'error');
         e.target.value = '';
         return;
     }
