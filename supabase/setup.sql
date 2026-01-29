@@ -72,15 +72,23 @@ VALUES ('products', 'products', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Policy: Allow public to see images
+DROP POLICY IF EXISTS "Public Read Access" ON storage.objects;
 CREATE POLICY "Public Read Access"
 ON storage.objects FOR SELECT
 USING (bucket_id = 'products');
 
 -- Policy: Allow all to upload for this demo (Consider restrictive policies for production)
+DROP POLICY IF EXISTS "Public Upload Access" ON storage.objects;
 CREATE POLICY "Public Upload Access"
 ON storage.objects FOR INSERT
 WITH CHECK (bucket_id = 'products');
 
+DROP POLICY IF EXISTS "Public Update Access" ON storage.objects;
 CREATE POLICY "Public Update Access"
 ON storage.objects FOR UPDATE
+USING (bucket_id = 'products');
+
+DROP POLICY IF EXISTS "Public Delete Access" ON storage.objects;
+CREATE POLICY "Public Delete Access"
+ON storage.objects FOR DELETE
 USING (bucket_id = 'products');
