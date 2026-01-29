@@ -143,7 +143,7 @@ function updateCartUI() {
 
     // Update subtotal
     if (cartSubtotal) {
-        cartSubtotal.textContent = formatPrice(subtotal);
+        cartSubtotal.textContent = window.poxterProducts.formatPrice(subtotal);
     }
 
     // Render cart items
@@ -176,7 +176,7 @@ function renderCartItems() {
             <div class="cart-item-details">
                 <h4 class="cart-item-title">${item.name}</h4>
                 <p class="cart-item-variant">Size: ${item.size} | Qty: ${item.quantity}</p>
-                <p class="cart-item-price">${formatPrice(item.price * item.quantity)}</p>
+                <p class="cart-item-price">${window.poxterProducts.formatPrice(item.price * item.quantity)}</p>
                 <button class="cart-item-remove" data-id="${item.id}" data-size="${item.size}">Remove</button>
             </div>
         </div>

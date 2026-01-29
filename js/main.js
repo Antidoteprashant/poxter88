@@ -197,11 +197,11 @@ function openQuickView(product) {
     if (quickviewPrice) {
         if (product.originalPrice) {
             quickviewPrice.innerHTML = `
-                <span class="price-original">${formatPrice(product.originalPrice)}</span>
-                ${formatPrice(product.price)}
+                <span class="price-original">${window.poxterProducts.formatPrice(product.originalPrice)}</span>
+                ${window.poxterProducts.formatPrice(product.price)}
             `;
         } else {
-            quickviewPrice.textContent = formatPrice(product.price);
+            quickviewPrice.textContent = window.poxterProducts.formatPrice(product.price);
         }
     }
 
@@ -235,7 +235,7 @@ function setupProductCardClicks() {
             e.preventDefault();
             e.stopPropagation();
             const productId = quickAddBtn.dataset.productId;
-            const product = getProductById(productId);
+            const product = window.poxterProducts.getProductById(productId);
             if (product) {
                 openQuickView(product);
             }
@@ -246,7 +246,7 @@ function setupProductCardClicks() {
         const productCard = e.target.closest('.product-card');
         if (productCard) {
             const productId = productCard.dataset.productId;
-            const product = getProductById(productId);
+            const product = window.poxterProducts.getProductById(productId);
             if (product) {
                 openQuickView(product);
             }

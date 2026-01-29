@@ -72,7 +72,7 @@ function validateCart() {
         }
 
         // Check availability (all posters have fixed A4 size)
-        const product = getProductById(item.id);
+        const product = window.poxterProducts.getProductById(item.id);
         if (!product) {
             errors.push({
                 type: 'unavailable',
@@ -131,7 +131,7 @@ function showValidationModal(validation) {
             </div>
             <div class="validation-summary">
                 <div class="summary-row"><span>Items:</span><span>${validation.cartItems.length}</span></div>
-                <div class="summary-row total"><span>Subtotal:</span><span>${formatPrice(validation.subtotal)}</span></div>
+                <div class="summary-row total"><span>Subtotal:</span><span>${window.poxterProducts.formatPrice(validation.subtotal)}</span></div>
             </div>
         `;
     }
@@ -226,14 +226,14 @@ function updateOrderSummary() {
                         <span class="order-item-name">${item.name}</span>
                         <span class="order-item-details">Size: ${item.size} × ${item.quantity}</span>
                     </div>
-                    <span class="order-item-price">${formatPrice(item.price * item.quantity)}</span>
+                    <span class="order-item-price">${window.poxterProducts.formatPrice(item.price * item.quantity)}</span>
                 </div>
             `).join('')}
         </div>
         <div class="order-totals">
-            <div class="order-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
-            <div class="order-row"><span>Shipping</span><span>${shipping === 0 ? 'FREE' : formatPrice(shipping)}</span></div>
-            <div class="order-row order-total"><span>Total</span><span>${formatPrice(total)}</span></div>
+            <div class="order-row"><span>Subtotal</span><span>${window.poxterProducts.formatPrice(subtotal)}</span></div>
+            <div class="order-row"><span>Shipping</span><span>${shipping === 0 ? 'FREE' : window.poxterProducts.formatPrice(shipping)}</span></div>
+            <div class="order-row order-total"><span>Total</span><span>${window.poxterProducts.formatPrice(total)}</span></div>
         </div>
     `;
 }

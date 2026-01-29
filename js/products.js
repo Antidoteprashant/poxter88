@@ -134,3 +134,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => clearInterval(checkInit), 5000);
 });
 
+// Export functions for use in other scripts
+window.poxterProducts = {
+    formatPrice,
+    getProductById,
+    renderProducts
+};
+
