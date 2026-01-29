@@ -24,15 +24,15 @@
             </div>
             <form id="loginForm" class="login-form">
                 <div class="form-group">
-                    <label for="adminUsername">Username</label>
-                    <input type="text" id="adminUsername" placeholder="Enter username" required>
+                    <label for="adminUsername">Email Address</label>
+                    <input type="email" id="adminUsername" placeholder="admin@example.com" required>
                 </div>
                 <div class="form-group">
                     <label for="adminPassword">Password</label>
                     <input type="password" id="adminPassword" placeholder="Enter password" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Login</button>
-                <p class="login-hint">Demo: admin / admin123</p>
+                <button type="submit" class="btn btn-primary btn-full">Login to Dashboard</button>
+
             </form>
         </div>
     </div>
@@ -84,6 +84,16 @@
                         <path d="m19 9-5 5-4-4-3 3"></path>
                     </svg>
                     Analytics
+                </a>
+                <a href="#" class="nav-item" data-section="admins">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Admins
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -340,6 +350,43 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Admins Section -->
+                <section class="section" id="adminsSection" style="display: none;">
+                    <div class="section-header">
+                        <div>
+                            <h2>Admin Management</h2>
+                            <p>Manage users with administrative access</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAdminModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5v14"></path>
+                            </svg>
+                            Add Admin
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Admin ID</th>
+                                        <th>Email</th>
+                                        <th>Joined Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminsTable">
+                                    <tr>
+                                        <td colspan="4" class="empty-state">Loading admins...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
@@ -425,6 +472,27 @@
                 <button class="modal-close" onclick="closeOrderModal()">&times;</button>
             </div>
             <div id="orderDetails"></div>
+        </div>
+    </div>
+
+    <!-- Add Admin Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Admin</h2>
+                <button class="modal-close" onclick="closeAdminModal()">&times;</button>
+            </div>
+            <form id="adminForm" onsubmit="addAdmin(event)">
+                <div class="form-group">
+                    <label for="newAdminEmail">Admin Email *</label>
+                    <input type="email" id="newAdminEmail" placeholder="Enter user's email" required>
+                    <small class="form-hint">The user must already have a registered account.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Grant Admin Access</button>
+                </div>
+            </form>
         </div>
     </div>
 

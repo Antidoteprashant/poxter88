@@ -58,9 +58,23 @@ CREATE POLICY "Allow authenticated users to insert orders" ON public.orders
 CREATE POLICY "Allow users to see their own orders" ON public.orders
     FOR SELECT USING (auth.uid() = user_id);
 
--- Admin policies (can be adjusted based on needs)
-CREATE POLICY "Enable all access for admin cleanup" ON public.products FOR ALL USING (true);
-CREATE POLICY "Enable all access for admin orders" ON public.orders FOR ALL USING (true);
+-- Helper function to check if user is admin
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM public.admins
+        WHERE id = auth.uid()
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Admin policies
+CREATE POLICY "Enable all access for admins on products" ON public.products
+    FOR ALL USING (public.is_admin());
+
+CREATE POLICY "Enable all access for admins on orders" ON public.orders
+    FOR ALL USING (public.is_admin());
 
 -- 5. Storage setup
 -- Run these commands to initialize the products bucket and its policies
@@ -92,3 +106,74 @@ DROP POLICY IF EXISTS "Public Delete Access" ON storage.objects;
 CREATE POLICY "Public Delete Access"
 ON storage.objects FOR DELETE
 USING (bucket_id = 'products');
+
+-- 6. User and Admin Profiles (Security Model)
+-- IMPORTANT: Passwords are NOT stored here. They are handled by Supabase Auth (auth.users).
+-- These tables link to auth.users.id to provide metadata and authorization status.
+
+-- Users table for extended profile (Address, Phone, etc.)
+CREATE TABLE IF NOT EXISTS public.users (
+    -- id references the centralized Auth record
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    full_name TEXT,
+    email TEXT,
+    phone TEXT,
+    address TEXT,
+    city TEXT,
+    pincode TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Admins table for administrative authorization
+-- If a user's UUID is here, they are granted admin privileges via public.is_admin()
+CREATE TABLE IF NOT EXISTS public.admins (
+    -- id references the centralized Auth record
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT, -- Stored for convenience and identifying admins in the table editor
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admins ENABLE ROW LEVEL SECURITY;
+
+-- Policies for public.users
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.users;
+CREATE POLICY "Users can view their own profile" ON public.users
+    FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.users;
+CREATE POLICY "Users can update their own profile" ON public.users
+    FOR UPDATE USING (auth.uid() = id);
+
+-- Policies for public.admins
+DROP POLICY IF EXISTS "Admins are viewable by authenticated users" ON public.admins;
+CREATE POLICY "Admins are viewable by authenticated users" ON public.admins
+    FOR SELECT USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Admins can be managed by other admins" ON public.admins;
+CREATE POLICY "Admins can be managed by other admins" ON public.admins
+    FOR ALL USING (public.is_admin());
+
+-- 7. Triggers for Auth Integration
+-- Function to handle new user signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.users (id, full_name, email, phone)
+    VALUES (
+        new.id,
+        new.raw_user_meta_data->>'full_name',
+        new.email,
+        new.raw_user_meta_data->>'phone'
+    );
+    RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger on auth.users
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

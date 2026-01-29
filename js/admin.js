@@ -3,16 +3,12 @@
  * Handles authentication, product management, orders, and analytics
  */
 
-// Admin credentials
-const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'admin123'
-};
-
 // State
 let isAuthenticated = false;
+let currentAdmin = null;
 let adminProducts = [];
 let adminOrders = [];
+let adminList = [];
 let pendingImageFile = null;
 
 // DOM Elements
@@ -28,15 +24,107 @@ function initAdmin() {
     pageTitle = document.getElementById('pageTitle');
     pageSubtitle = document.getElementById('pageSubtitle');
 
-    const session = sessionStorage.getItem('poxter_admin_session');
-    if (session) {
-        isAuthenticated = true;
-        showDashboard();
-    }
+    // Wait for Supabase client
+    const checkSupabase = setInterval(() => {
+        if (window.supabaseClient) {
+            clearInterval(checkSupabase);
+            checkCurrentSession();
+        }
+    }, 100);
 
     setupEventListeners();
     updateTime();
     setInterval(updateTime, 1000);
+}
+
+/**
+ * Check if a valid admin session exists
+ */
+async function checkCurrentSession() {
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
+
+    if (session) {
+        // Verify if user is in admins table
+        const { data: admin, error } = await window.supabaseClient
+            .from('admins')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+        if (admin && !error) {
+            isAuthenticated = true;
+            currentAdmin = session.user;
+            showDashboard();
+        } else {
+            // Logged in but not an admin
+            await window.supabaseClient.auth.signOut();
+            isAuthenticated = false;
+            currentAdmin = null;
+        }
+    }
+}
+
+/**
+ * Handle Login
+ */
+async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('adminUsername').value; // Using email as username
+    const password = document.getElementById('adminPassword').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    if (!window.supabaseClient) {
+        showNotification('Auth system not ready.', 'error');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+    try {
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) throw error;
+
+        // Check if user is an admin
+        const { data: admin, error: adminError } = await window.supabaseClient
+            .from('admins')
+            .select('*')
+            .eq('id', data.user.id)
+            .single();
+
+        if (adminError || !admin) {
+            await window.supabaseClient.auth.signOut();
+            throw new Error('Access denied. You have valid credentials, but you do not have administrator privileges. Please contact your system administrator.');
+        }
+
+        isAuthenticated = true;
+        currentAdmin = data.user;
+        showDashboard();
+        showNotification(`Welcome, ${data.user.email}`, 'success');
+    } catch (err) {
+        console.error('Login error:', err.message);
+        showNotification(err.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login to Dashboard';
+    }
+}
+
+/**
+ * Logout
+ */
+async function logout() {
+    if (window.supabaseClient) {
+        await window.supabaseClient.auth.signOut();
+    }
+    isAuthenticated = false;
+    currentAdmin = null;
+    loginScreen.style.display = 'flex';
+    dashboard.style.display = 'none';
 }
 
 /**
@@ -88,33 +176,6 @@ function setupEventListeners() {
 }
 
 /**
- * Handle Login
- */
-function handleLogin(e) {
-    e.preventDefault();
-    const username = document.getElementById('adminUsername').value;
-    const password = document.getElementById('adminPassword').value;
-
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        isAuthenticated = true;
-        sessionStorage.setItem('poxter_admin_session', 'true');
-        showDashboard();
-    } else {
-        showNotification('Invalid credentials.', 'error');
-    }
-}
-
-/**
- * Logout
- */
-function logout() {
-    isAuthenticated = false;
-    sessionStorage.removeItem('poxter_admin_session');
-    loginScreen.style.display = 'flex';
-    dashboard.style.display = 'none';
-}
-
-/**
  * Show Dashboard
  */
 async function showDashboard() {
@@ -136,6 +197,7 @@ async function showDashboard() {
 async function loadAllData() {
     await loadProducts();
     await loadOrders();
+    await loadAdmins(); // Added for Admin Management
     updateStats();
     generateCharts();
 }
@@ -158,7 +220,8 @@ function showSection(sectionId) {
         overview: { title: 'Dashboard Overview', subtitle: 'Welcome back, Admin' },
         products: { title: 'Product Management', subtitle: 'Manage your poster catalog' },
         orders: { title: 'Order Management', subtitle: 'Track and manage customer orders' },
-        analytics: { title: 'Analytics', subtitle: 'Business insights and metrics' }
+        analytics: { title: 'Analytics', subtitle: 'Business insights and metrics' },
+        admins: { title: 'Admin Management', subtitle: 'Manage users with administrative access' }
     };
 
     if (titles[sectionId]) {
@@ -520,6 +583,121 @@ function generateCharts() {
     </div>`;
 }
 
+/**
+ * Admin Management
+ */
+async function loadAdmins() {
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('admins')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        adminList = data || [];
+        renderAdminsTable();
+    } catch (err) {
+        console.error('Error loading admins:', err.message);
+        showNotification('Error loading admins', 'error');
+    }
+}
+
+function renderAdminsTable() {
+    const tbody = document.getElementById('adminsTable');
+    if (!tbody) return;
+
+    if (adminList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No other admins found</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = adminList.map(admin => `
+        <tr>
+            <td><small>${admin.id}</small></td>
+            <td><strong>${admin.email}</strong></td>
+            <td>${new Date(admin.created_at).toLocaleDateString()}</td>
+            <td>
+                ${admin.id !== currentAdmin.id ? `
+                    <button class="btn btn-icon btn-danger" onclick="removeAdmin('${admin.id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                    </button>
+                ` : '<span class="status status-active">You</span>'}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openAdminModal() {
+    document.getElementById('adminModal').classList.add('active');
+}
+
+function closeAdminModal() {
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('adminForm').reset();
+}
+
+async function addAdmin(e) {
+    e.preventDefault();
+    const email = document.getElementById('newAdminEmail').value.trim();
+    if (!email) return;
+
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+    try {
+        // 1. Look up user by email in public.users table (not auth.users for security/RLS reasons)
+        // Note: public.users is populated via trigger on auth.users signup.
+        const { data: userData, error: userError } = await window.supabaseClient
+            .from('users')
+            .select('id, email')
+            .eq('email', email)
+            .single();
+
+        if (userError || !userData) {
+            throw new Error('User not found. They must sign up for an account on the website first.');
+        }
+
+        // 2. Add to admins table
+        const { error: adminError } = await window.supabaseClient
+            .from('admins')
+            .insert([{ id: userData.id, email: userData.email }]);
+
+        if (adminError) {
+            if (adminError.code === '23505') throw new Error('This user is already an admin.');
+            throw adminError;
+        }
+
+        showNotification(`${email} is now an admin!`, 'success');
+        closeAdminModal();
+        await loadAdmins();
+    } catch (err) {
+        showNotification(err.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    }
+}
+
+async function removeAdmin(adminId) {
+    if (!confirm('Are you sure you want to remove this admin? they will lose dashboard access immediately.')) return;
+
+    try {
+        const { error } = await window.supabaseClient
+            .from('admins')
+            .delete()
+            .eq('id', adminId);
+
+        if (error) throw error;
+
+        showNotification('Admin removed successfully', 'success');
+        await loadAdmins();
+    } catch (err) {
+        showNotification(err.message, 'error');
+    }
+}
+
 function viewOrder(orderId) {
     const order = adminOrders.find(o => o.id === orderId);
     if (!order) return;
@@ -577,6 +755,10 @@ window.updateOrderStatus = updateOrderStatus;
 window.viewOrder = viewOrder;
 window.closeOrderModal = closeOrderModal;
 window.closeProductModal = closeProductModal;
+window.openAdminModal = openAdminModal;
+window.closeAdminModal = closeAdminModal;
+window.addAdmin = addAdmin;
+window.removeAdmin = removeAdmin;
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', initAdmin);
