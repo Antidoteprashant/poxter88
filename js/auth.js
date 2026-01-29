@@ -9,6 +9,20 @@ const authState = {
     user: null
 };
 
+/**
+ * Check if user is logged in
+ */
+function isLoggedIn() {
+    return authState.isLoggedIn;
+}
+
+/**
+ * Get current user data
+ */
+function getCurrentUser() {
+    return authState.user;
+}
+
 
 // Load auth state from Supabase
 async function loadAuthState(retries = 5) {

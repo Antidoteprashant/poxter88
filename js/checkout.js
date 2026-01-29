@@ -164,25 +164,29 @@ function closeValidationModal() {
  * Show checkout form
  */
 function showCheckoutForm() {
+    // Strictly require login before showing the form
+    if (!window.poxter88Auth || !window.poxter88Auth.isLoggedIn()) {
+        closeValidationModal();
+        window.poxter88Auth.showAuthModal('login', 'checkout');
+        return;
+    }
+
     closeValidationModal();
 
     const modal = document.getElementById('checkoutModal');
     if (!modal) return;
 
-    // Pre-fill if user is logged in (using new auth system)
-    if (window.poxter88Auth && window.poxter88Auth.isLoggedIn()) {
-        const user = window.poxter88Auth.getCurrentUser();
-        if (user) {
-            const fullNameInput = document.getElementById('fullName');
-            const emailInput = document.getElementById('email');
-            const phoneInput = document.getElementById('phone');
+    // Pre-fill if user is logged in
+    const user = window.poxter88Auth.getCurrentUser();
+    if (user) {
+        const fullNameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
 
-            if (fullNameInput && user.fullName) fullNameInput.value = user.fullName;
-            if (emailInput && user.email) emailInput.value = user.email;
-            if (phoneInput && user.phone) phoneInput.value = user.phone;
-        }
+        if (fullNameInput && user.fullName) fullNameInput.value = user.fullName;
+        if (emailInput && user.email) emailInput.value = user.email;
+        if (phoneInput && user.phone) phoneInput.value = user.phone;
     }
-
     // Update order summary
     updateOrderSummary();
 
@@ -425,10 +429,14 @@ function showOrderSuccess(orderId, email) {
  * Requires user to be logged in before proceeding
  */
 function initCheckoutProcess() {
-    // Check if user is logged in first
-    if (window.poxter88Auth && !window.poxter88Auth.isLoggedIn()) {
-        // User not logged in - show login modal with checkout redirect
-        window.poxter88Auth.showAuthModal('login', 'checkout');
+    // Check if user is logged in first - strictly
+    if (!window.poxter88Auth || !window.poxter88Auth.isLoggedIn()) {
+        // User not logged in or auth not ready - show login modal with checkout redirect
+        if (window.poxter88Auth) {
+            window.poxter88Auth.showAuthModal('login', 'checkout');
+        } else {
+            alert('Auth system is loading, please try again in a moment');
+        }
         return;
     }
 

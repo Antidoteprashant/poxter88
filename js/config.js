@@ -1,10 +1,10 @@
 /**
  * POXTER88 - Supabase Configuration
- * Replace the placeholders below with your project credentials
+ * Using Vite's environment variables
  */
 
-const SUPABASE_URL = 'https://aoyrnygbnkzjdmxxxoiz.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFveXJueWdibmt6amRteHh4b2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1OTYzMjIsImV4cCI6MjA4NTE3MjMyMn0.ZuwqI9drW_bRoFZ5_7Gels3kMvqjI76OjKUOsrh31h0';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Initialize Supabase client
 function initSupabase() {
