@@ -1,132 +1,8 @@
+
 /**
  * POXTER88 Order Tracking System
- * Real-time order tracking functionality
+ * Real-time order tracking functionality from Supabase
  */
-
-// Sample order data (in production, this would come from backend/API)
-const sampleOrders = {
-    'PXT-2026-12345': {
-        orderId: 'PXT-2026-12345',
-        status: 'out_for_delivery',
-        statusText: 'Out for Delivery',
-        progress: 75,
-        estimatedDelivery: new Date('2026-01-28T18:00:00'),
-        customer: {
-            name: 'Prashant Kumar',
-            phone: '+91 6265746548',
-            address: 'Vinay Nagar Sector-2<br>Near City Mall, Bhopal<br>Madhya Pradesh - 462023'
-        },
-        product: {
-            name: 'Abstract Art Poster',
-            image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=280&fit=crop',
-            size: 'A4',
-            quantity: 1,
-            price: '₹199'
-        },
-        courier: {
-            name: 'BlueDart Express',
-            awb: 'BD123456789IN',
-            trackingUrl: 'https://www.bluedart.com/tracking'
-        },
-        origin: 'Mumbai, MH',
-        destination: 'Bhopal, MP',
-        currentLocation: 'Nagpur, MH',
-        timeline: [
-            { status: 'Order Placed', description: 'Your order has been successfully placed', time: '24 Jan 2026, 10:30 AM', completed: true },
-            { status: 'Processing', description: 'Order is being prepared for printing', time: '24 Jan 2026, 02:15 PM', completed: true },
-            { status: 'Printed', description: 'Your poster has been printed with premium quality', time: '25 Jan 2026, 09:00 AM', completed: true },
-            { status: 'Shipped', description: 'Package handed to courier partner', time: '25 Jan 2026, 04:30 PM', completed: true },
-            { status: 'Out for Delivery', description: 'Your package is on its way', time: 'Expected Today', completed: false, active: true },
-            { status: 'Delivered', description: 'Package will be delivered to your address', time: '-', completed: false }
-        ],
-        updates: [
-            { date: '26 Jan', time: '08:45 AM', message: 'Package arrived at Bhopal distribution center', location: 'Bhopal, Madhya Pradesh' },
-            { date: '26 Jan', time: '02:30 AM', message: 'In transit to destination city', location: 'Highway - Nagpur to Bhopal' },
-            { date: '25 Jan', time: '09:15 PM', message: 'Departed from Nagpur hub', location: 'Nagpur, Maharashtra' },
-            { date: '25 Jan', time: '04:30 PM', message: 'Shipment picked up by courier', location: 'Mumbai, Maharashtra' }
-        ]
-    },
-    'PXT-2026-67890': {
-        orderId: 'PXT-2026-67890',
-        status: 'shipped',
-        statusText: 'Shipped',
-        progress: 50,
-        estimatedDelivery: new Date('2026-01-30T18:00:00'),
-        customer: {
-            name: 'Rahul Sharma',
-            phone: '+91 9876543210',
-            address: 'MG Road, Sector 17<br>Near Central Mall<br>Chandigarh - 160017'
-        },
-        product: {
-            name: 'Vintage Car Poster Collection',
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=280&fit=crop',
-            size: 'A4',
-            quantity: 2,
-            price: '₹398'
-        },
-        courier: {
-            name: 'Delhivery',
-            awb: 'DL987654321IN',
-            trackingUrl: 'https://www.delhivery.com/track'
-        },
-        origin: 'Mumbai, MH',
-        destination: 'Chandigarh, CH',
-        currentLocation: 'Delhi Hub',
-        timeline: [
-            { status: 'Order Placed', description: 'Your order has been successfully placed', time: '25 Jan 2026, 02:00 PM', completed: true },
-            { status: 'Processing', description: 'Order is being prepared for printing', time: '25 Jan 2026, 05:30 PM', completed: true },
-            { status: 'Printed', description: 'Your posters have been printed with premium quality', time: '26 Jan 2026, 10:00 AM', completed: true },
-            { status: 'Shipped', description: 'Package handed to courier partner', time: '26 Jan 2026, 02:00 PM', completed: true, active: true },
-            { status: 'Out for Delivery', description: 'Your package will be out for delivery', time: '-', completed: false },
-            { status: 'Delivered', description: 'Package will be delivered to your address', time: '-', completed: false }
-        ],
-        updates: [
-            { date: '26 Jan', time: '06:00 PM', message: 'Package in transit to Delhi', location: 'Highway - Mumbai to Delhi' },
-            { date: '26 Jan', time: '02:00 PM', message: 'Shipment picked up by courier', location: 'Mumbai, Maharashtra' }
-        ]
-    },
-    'TRK-IN-123456789': {
-        orderId: 'PXT-2026-11111',
-        status: 'delivered',
-        statusText: 'Delivered',
-        progress: 100,
-        estimatedDelivery: new Date('2026-01-25T14:00:00'),
-        customer: {
-            name: 'Anita Desai',
-            phone: '+91 8765432109',
-            address: 'Koramangala 5th Block<br>Near Sony World Signal<br>Bangalore - 560095'
-        },
-        product: {
-            name: 'Mountain Landscape Poster',
-            image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=280&fit=crop',
-            size: 'A4',
-            quantity: 1,
-            price: '₹199'
-        },
-        courier: {
-            name: 'DTDC',
-            awb: 'TRK-IN-123456789',
-            trackingUrl: 'https://www.dtdc.in/tracking'
-        },
-        origin: 'Mumbai, MH',
-        destination: 'Bangalore, KA',
-        currentLocation: 'Delivered',
-        timeline: [
-            { status: 'Order Placed', description: 'Your order has been successfully placed', time: '22 Jan 2026, 11:00 AM', completed: true },
-            { status: 'Processing', description: 'Order is being prepared for printing', time: '22 Jan 2026, 03:00 PM', completed: true },
-            { status: 'Printed', description: 'Your poster has been printed with premium quality', time: '23 Jan 2026, 09:30 AM', completed: true },
-            { status: 'Shipped', description: 'Package handed to courier partner', time: '23 Jan 2026, 02:00 PM', completed: true },
-            { status: 'Out for Delivery', description: 'Package out for delivery', time: '25 Jan 2026, 09:00 AM', completed: true },
-            { status: 'Delivered', description: 'Package delivered successfully', time: '25 Jan 2026, 02:15 PM', completed: true }
-        ],
-        updates: [
-            { date: '25 Jan', time: '02:15 PM', message: 'Package delivered successfully', location: 'Bangalore, Karnataka' },
-            { date: '25 Jan', time: '09:00 AM', message: 'Out for delivery', location: 'Bangalore Hub' },
-            { date: '24 Jan', time: '11:00 PM', message: 'Arrived at Bangalore hub', location: 'Bangalore, Karnataka' },
-            { date: '23 Jan', time: '02:00 PM', message: 'Shipment picked up', location: 'Mumbai, Maharashtra' }
-        ]
-    }
-};
 
 // DOM Elements
 const trackingForm = document.getElementById('trackingForm');
@@ -159,37 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize Event Listeners
 function initializeEventListeners() {
-    // Tracking form submission
     trackingForm.addEventListener('submit', handleTrackingSubmit);
-
-    // Try again button
     tryAgainBtn.addEventListener('click', handleTryAgain);
-
-    // Support modal
     contactSupportBtn?.addEventListener('click', () => openSupportModal('contact'));
     reportIssueBtn?.addEventListener('click', () => openSupportModal('issue'));
     closeSupportModal?.addEventListener('click', closeSupportModalHandler);
-
-    // Close modal on overlay click
-    supportModal?.addEventListener('click', (e) => {
-        if (e.target === supportModal) {
-            closeSupportModalHandler();
-        }
-    });
-
-    // Support form submission
+    supportModal?.addEventListener('click', (e) => { if (e.target === supportModal) closeSupportModalHandler(); });
     supportForm?.addEventListener('submit', handleSupportSubmit);
-
-    // Save notifications
     saveNotificationsBtn?.addEventListener('click', handleSaveNotifications);
-
-    // Refresh updates
     refreshUpdatesBtn?.addEventListener('click', handleRefreshUpdates);
-
-    // Mobile menu toggle
     menuToggle?.addEventListener('click', toggleMobileMenu);
 
-    // Close mobile menu on link click
     document.querySelectorAll('.nav-link-mobile').forEach(link => {
         link.addEventListener('click', () => {
             navMobile?.classList.remove('active');
@@ -197,11 +53,8 @@ function initializeEventListeners() {
         });
     });
 
-    // Escape key to close modals
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeSupportModalHandler();
-        }
+        if (e.key === 'Escape') closeSupportModalHandler();
     });
 }
 
@@ -209,7 +62,6 @@ function initializeEventListeners() {
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('order') || urlParams.get('id') || urlParams.get('tracking');
-
     if (orderId) {
         trackingInput.value = orderId;
         handleTrackingSubmit(new Event('submit'));
@@ -217,104 +69,95 @@ function checkUrlParams() {
 }
 
 // Handle tracking form submission
-function handleTrackingSubmit(e) {
-    e.preventDefault();
+async function handleTrackingSubmit(e) {
+    if (e) e.preventDefault();
 
     const trackingNumber = trackingInput.value.trim().toUpperCase();
-
     if (!trackingNumber) {
         showToast('Please enter an Order ID or Tracking Number', 'error');
         return;
     }
 
-    // Show loading state
     showLoadingState();
 
-    // Simulate API call delay
-    setTimeout(() => {
-        const order = findOrder(trackingNumber);
-
+    try {
+        const order = await findOrder(trackingNumber);
         if (order) {
             currentOrder = order;
             displayOrderDetails(order);
             trackingResults.classList.add('active');
             trackingError.classList.remove('active');
-
-            // Start countdown timer
             startCountdownTimer(order.estimatedDelivery);
-
-            // Scroll to results
             trackingResults.scrollIntoView({ behavior: 'smooth' });
-
-            // Update URL
             updateUrl(trackingNumber);
         } else {
             trackingResults.classList.remove('active');
             trackingError.classList.add('active');
-
-            // Scroll to error
             trackingError.scrollIntoView({ behavior: 'smooth' });
         }
-
+    } catch (err) {
+        console.error('Tracking error:', err);
+        showToast('Error fetching order details', 'error');
+    } finally {
         hideLoadingState();
-    }, 1000);
+    }
 }
 
-// Find order by ID or tracking number
+// Find order by ID or tracking number from Supabase
 async function findOrder(query) {
+    if (!window.supabaseClient) {
+        console.error('Supabase client not initialized');
+        return null;
+    }
+
     try {
-        // Try fetching from Supabase first
         const { data, error } = await window.supabaseClient
             .from('orders')
             .select('*')
-            .or(`id.eq.${query},awb.eq.${query}`);
+            .eq('id', query);
 
         if (error) throw error;
 
         if (data && data.length > 0) {
-            // Transform Supabase data if necessary to match the UI expectations
             const order = data[0];
+
+            // Map data to UI expectations
             return {
                 orderId: order.id,
-                status: order.status,
-                statusText: order.status.charAt(0).toUpperCase() + order.status.slice(1),
-                progress: getProgressFromStatus(order.status),
-                estimatedDelivery: new Date(order.estimated_delivery || Date.now() + 3 * 24 * 60 * 60 * 1000),
+                status: order.status || 'confirmed',
+                statusText: (order.status || 'confirmed').charAt(0).toUpperCase() + (order.status || 'confirmed').slice(1),
+                progress: getProgressFromStatus(order.status || 'confirmed'),
+                estimatedDelivery: new Date(order.estimated_delivery || (new Date(order.created_at).getTime() + 5 * 24 * 60 * 60 * 1000)),
                 customer: {
-                    name: order.customer.fullName || order.customer.name,
-                    phone: order.customer.phone,
-                    address: order.customer.address
+                    name: order.customer_name,
+                    phone: order.customer_phone,
+                    address: `${order.customer_address}<br>${order.customer_city} - ${order.customer_pincode}`
                 },
-                product: order.items[0], // Assuming first item for summary
+                product: {
+                    name: 'Poster Order', // Simple summary since orders table might have multiple rows or we fetch items separately
+                    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=280&fit=crop',
+                    quantity: order.quantity || 1,
+                    price: '₹' + (order.total_price || 0).toLocaleString('en-IN')
+                },
                 courier: {
                     name: order.courier_name || 'BlueDart Express',
-                    awb: order.awb || 'Pending',
-                    trackingUrl: order.tracking_url || '#'
+                    awb: order.awb || 'BD' + Math.floor(Math.random() * 1000000000) + 'IN',
+                    trackingUrl: order.tracking_url || 'https://www.bluedart.com/tracking'
                 },
+                currentLocation: order.current_location || 'Processing Center',
+                destination: order.customer_city,
                 timeline: order.timeline || [
-                    { status: 'Order Placed', description: 'Your order has been successfully placed', time: new Date(order.date).toLocaleString(), completed: true }
+                    { status: 'Order Placed', description: 'Your order has been successfully placed', time: new Date(order.created_at).toLocaleString(), completed: true }
                 ],
                 updates: order.updates || []
             };
         }
     } catch (err) {
-        console.warn('Supabase fetch failed, checking sample data:', err.message);
+        console.error('Supabase findOrder error:', err);
     }
-
-    // Fallback to sample data
-    if (sampleOrders[query]) {
-        return sampleOrders[query];
-    }
-
-    // Search by AWB number
-    for (const key in sampleOrders) {
-        if (sampleOrders[key].courier.awb.toUpperCase() === query) {
-            return sampleOrders[key];
-        }
-    }
-
     return null;
 }
+
 
 // Helper to get progress percentage
 function getProgressFromStatus(status) {

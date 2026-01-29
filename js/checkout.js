@@ -298,10 +298,11 @@ function validateCheckoutForm() {
     };
 }
 
+
 /**
  * Submit order
  */
-function submitOrder() {
+async function submitOrder() {
     const validation = validateCheckoutForm();
 
     if (!validation.valid) {
@@ -316,47 +317,68 @@ function submitOrder() {
         submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
     }
 
-    // Submit to Supabase
-    (async () => {
-        try {
-            // Generate order ID
-            const orderId = 'poxter' + Date.now().toString(36).toUpperCase();
+    try {
+        if (!window.supabaseClient) throw new Error('Supabase not initialized');
 
-            // Prepare order data
-            const order = {
-                id: orderId,
-                items: JSON.parse(localStorage.getItem('poxter_cart') || '[]'),
-                customer: validation.data,
-                status: 'confirmed',
-                date: new Date().toISOString(),
-                total_amount: validation.data.total // Assumes total is passed or calculated
-            };
-
-            const { error } = await window.supabaseClient
-                .from('orders')
-                .insert([order]);
-
-            if (error) throw error;
-
-            // Clear cart
-            localStorage.setItem('poxter_cart', '[]');
-            if (window.poxterCart) {
-                window.poxterCart.clearCart();
-            }
-
-            // Show success
-            showOrderSuccess(orderId, validation.data.email);
-        } catch (err) {
-            console.error('Error submitting order to Supabase:', err);
-            showFormErrors(['Failed to place order. Please try again.']);
-
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Place Order';
-            }
+        // Get authenticated user
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) {
+            window.poxter88Auth.showAuthModal('login', 'checkout');
+            throw new Error('Please login to place an order');
         }
-    })();
+
+        const cartItems = JSON.parse(localStorage.getItem('poxter_cart') || '[]');
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal >= 999 ? 0 : 99;
+        const total = subtotal + shipping;
+
+        // Generate a random order ID for tracking
+        const orderId = 'poxter' + Math.floor(100000 + Math.random() * 900000);
+
+        // Map cart items to order rows (following user request for product_id, quantity fields)
+        // If there are multiple items, we'll create multiple rows with the same order ID
+        const orderRows = cartItems.map(item => ({
+            id: orderId + '-' + item.id, // Unique ID for the row, but searchable by orderId
+            user_id: user.id,
+            product_id: item.id,
+            quantity: item.quantity,
+            total_price: total, // We store the order total for each row for easy access, or calculate per item
+            status: 'confirmed',
+            customer_name: validation.data.fullName,
+            customer_email: validation.data.email,
+            customer_phone: validation.data.phone,
+            customer_address: validation.data.address,
+            customer_city: validation.data.city,
+            customer_pincode: validation.data.pincode,
+            payment_method: validation.data.paymentMethod,
+            payment_status: 'pending'
+        }));
+
+        const { error } = await window.supabaseClient
+            .from('orders')
+            .insert(orderRows);
+
+        if (error) throw error;
+
+        // Clear cart
+        localStorage.setItem('poxter_cart', '[]');
+        if (window.poxterCart) {
+            window.poxterCart.clearCart();
+        }
+
+        // Show success
+        showOrderSuccess(orderId, validation.data.email);
+    } catch (err) {
+        console.error('Error submitting order to Supabase:', err);
+        showFormErrors([err.message || 'Failed to place order. Please try again.']);
+
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Place Order';
+        }
+    }
 }
+
 
 /**
  * Show form validation errors

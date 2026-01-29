@@ -3,122 +3,9 @@
  * Poster products with fixed A4 size
  */
 
-const products = {
-    posters: [
-        {
-            id: 'poster-1',
-            name: 'Urban Skyline',
-            brand: 'POXTER88',
-            price: 499,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: true,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=800&fit=crop',
-            description: 'Stunning urban skyline poster perfect for modern spaces.'
-        },
-        {
-            id: 'poster-2',
-            name: 'Ocean Waves',
-            brand: 'POXTER88',
-            price: 499,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: false,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=800&fit=crop',
-            description: 'Calming ocean waves poster for a serene atmosphere.'
-        },
-        {
-            id: 'poster-3',
-            name: 'Mountain Peak',
-            brand: 'POXTER88',
-            price: 599,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: false,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&h=800&fit=crop',
-            description: 'Majestic mountain peak poster for nature lovers.'
-        },
-        {
-            id: 'poster-4',
-            name: 'Abstract Art',
-            brand: 'POXTER88',
-            price: 549,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: true,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=800&fit=crop',
-            description: 'Bold abstract art poster for creative spaces.'
-        },
-        {
-            id: 'poster-5',
-            name: 'Vintage Cinema',
-            brand: 'POXTER88',
-            price: 499,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: false,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600&h=800&fit=crop',
-            description: 'Classic vintage cinema poster for movie enthusiasts.'
-        },
-        {
-            id: 'poster-6',
-            name: 'Space Galaxy',
-            brand: 'POXTER88',
-            price: 649,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: false,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&h=800&fit=crop',
-            description: 'Mesmerizing space galaxy poster for cosmic vibes.'
-        },
-        {
-            id: 'poster-7',
-            name: 'Botanical Garden',
-            brand: 'POXTER88',
-            price: 449,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: false,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=600&h=800&fit=crop',
-            description: 'Beautiful botanical garden poster for plant lovers.'
-        },
-        {
-            id: 'poster-8',
-            name: 'Neon Lights',
-            brand: 'POXTER88',
-            price: 549,
-            originalPrice: null,
-            category: 'poster',
-            isOnSale: false,
-            isNew: true,
-            sizes: ['A4'],
-            image: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=600&h=800&fit=crop',
-            imageHover: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&h=800&fit=crop',
-            description: 'Vibrant neon lights poster for modern aesthetics.'
-        }
-    ]
-};
+
+// Current products list in memory for quick access
+let loadedProductsList = [];
 
 /**
  * Format price in Indian Rupees
@@ -126,6 +13,7 @@ const products = {
  * @returns {string} Formatted price string
  */
 function formatPrice(price) {
+    if (price === undefined || price === null) return 'N/A';
     return `Rs. ${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
@@ -135,8 +23,8 @@ function formatPrice(price) {
  * @returns {string} HTML string for product card
  */
 function createProductCard(product) {
-    const salePercentage = product.originalPrice
-        ? Math.round((1 - product.price / product.originalPrice) * 100)
+    const salePercentage = product.original_price
+        ? Math.round((1 - product.price / product.original_price) * 100)
         : 0;
 
     return `
@@ -147,25 +35,26 @@ function createProductCard(product) {
                     alt="${product.name}" 
                     class="product-image"
                     loading="lazy"
+                    onerror="this.src='https://via.placeholder.com/600x800?text=No+Image'"
                 >
-                ${product.imageHover ? `
+                ${product.image_hover ? `
                     <img 
-                        src="${product.imageHover}" 
+                        src="${product.image_hover}" 
                         alt="${product.name} - alternate view" 
                         class="product-image-hover"
                         loading="lazy"
                     >
                 ` : ''}
-                ${product.isOnSale ? `<span class="product-badge badge-sale">Sale</span>` : ''}
-                ${product.isNew && !product.isOnSale ? `<span class="product-badge badge-new">New</span>` : ''}
+                ${product.is_on_sale ? `<span class="product-badge badge-sale">Sale</span>` : ''}
+                ${product.is_new && !product.is_on_sale ? `<span class="product-badge badge-new">New</span>` : ''}
                 <button class="quick-add-btn" data-product-id="${product.id}">Quick Add</button>
             </div>
             <div class="product-info">
                 <h3 class="product-title">${product.name}</h3>
-                <p class="product-brand">${product.brand}</p>
-                <p class="product-size">Size: A4</p>
+                <p class="product-brand">${product.brand || 'POXTER88'}</p>
+                <p class="product-size">Size: ${product.sizes ? product.sizes[0] : 'A4'}</p>
                 <div class="product-price">
-                    ${product.originalPrice ? `<span class="price-original">${formatPrice(product.originalPrice)}</span>` : ''}
+                    ${product.original_price ? `<span class="price-original">${formatPrice(product.original_price)}</span>` : ''}
                     <span class="price-current">${formatPrice(product.price)}</span>
                 </div>
             </div>
@@ -173,57 +62,53 @@ function createProductCard(product) {
     `;
 }
 
-// Global state to store all loaded products from various sources
-let loadedProductsList = [];
-
 /**
  * Render products to a grid
  * @param {string} gridId - ID of the grid element
- * @param {Array} productList - Array of product objects
+ * @param {Array} productList - Array of product objects (not used anymore as we fetch)
  * @param {number} limit - Optional limit of products to show
  */
-async function renderProducts(gridId, productList, limit = null) {
+async function renderProducts(gridId, productList = [], limit = null) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
 
-    let itemsToRender = [...productList]; // Default to provided list
+    // Show loading state
+    grid.innerHTML = '<div class="loading-state"><p>Loading posters...</p></div>';
 
     try {
-        // Try fetching from Supabase
+        if (!window.supabaseClient) {
+            throw new Error('Supabase client not initialized');
+        }
+
+        // Fetch from Supabase
         const { data, error } = await window.supabaseClient
             .from('products')
-            .select('*');
+            .select('*')
+            .order('created_at', { ascending: false });
 
         if (error) throw error;
 
         if (data && data.length > 0) {
-            itemsToRender = data;
-            console.log('Fetched products from Supabase');
+            // Update global state
+            loadedProductsList = data;
+            const productsToRender = limit ? data.slice(0, limit) : data;
+
+            grid.innerHTML = productsToRender.map(product => createProductCard(product)).join('');
+            grid.classList.add('stagger-children');
+            console.log(`Loaded ${data.length} products from Supabase`);
         } else {
-            // Check localStorage if Supabase returns nothing
-            const saved = localStorage.getItem('poxter_admin_products');
-            if (saved) {
-                itemsToRender = JSON.parse(saved);
-                console.log('Using products from localStorage fallback');
-            }
+            grid.innerHTML = '<div class="empty-state"><p>No posters available yet.</p></div>';
+            loadedProductsList = [];
         }
     } catch (err) {
-        console.warn('Could not fetch products from Supabase, using localStorage or fallback data:', err.message);
-        const saved = localStorage.getItem('poxter_admin_products');
-        if (saved) {
-            itemsToRender = JSON.parse(saved);
-            console.log('Using products from localStorage fallback');
-        }
+        console.error('Error fetching products from Supabase:', err.message);
+        grid.innerHTML = `
+            <div class="error-state">
+                <p>Failed to load products. Please refresh the page.</p>
+                <small>${err.message}</small>
+            </div>
+        `;
     }
-
-    // Update global state
-    loadedProductsList = itemsToRender;
-
-    const productsToRender = limit ? itemsToRender.slice(0, limit) : itemsToRender;
-    grid.innerHTML = productsToRender.map(product => createProductCard(product)).join('');
-
-    // Add stagger animation class
-    grid.classList.add('stagger-children');
 }
 
 /**
@@ -232,14 +117,20 @@ async function renderProducts(gridId, productList, limit = null) {
  * @returns {Object|null} Product object or null
  */
 function getProductById(productId) {
-    // First search in dynamically loaded list, then fallback to initial list
-    return loadedProductsList.find(p => p.id === productId) ||
-        products.posters.find(p => p.id === productId) ||
-        null;
+    return loadedProductsList.find(p => p.id === productId) || null;
 }
 
 // Initialize products on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    // Render posters - Removed the limit of 8 to show all products
-    await renderProducts('postersGrid', products.posters);
+    // Wait a bit for Supabase to init if needed
+    const checkInit = setInterval(async () => {
+        if (window.supabaseClient) {
+            clearInterval(checkInit);
+            await renderProducts('postersGrid');
+        }
+    }, 100);
+
+    // Timeout after 5 seconds
+    setTimeout(() => clearInterval(checkInit), 5000);
 });
+

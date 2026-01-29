@@ -9,7 +9,6 @@ const authState = {
     user: null
 };
 
-let isMockMode = false;
 
 // Load auth state from Supabase
 async function loadAuthState(retries = 5) {
@@ -18,9 +17,7 @@ async function loadAuthState(retries = 5) {
             console.warn(`Supabase client not ready, retrying auth state load... (${retries} retries left)`);
             setTimeout(() => loadAuthState(retries - 1), 500);
         } else {
-            console.warn('Supabase client failed to initialize after multiple retries. Switching to Local Mode.');
-            isMockMode = true;
-            loadMockAuthState();
+            console.error('Supabase client failed to initialize. Auth system unavailable.');
         }
         return;
     }
@@ -49,54 +46,15 @@ async function loadAuthState(retries = 5) {
         updateAuthUI();
     } catch (err) {
         console.error('Unexpected error in loadAuthState:', err);
-        isMockMode = true;
-        loadMockAuthState();
     }
-}
-
-/**
- * Load mock auth state from localStorage
- */
-function loadMockAuthState() {
-    const savedUser = localStorage.getItem('poxter_mock_user');
-    if (savedUser) {
-        try {
-            authState.user = JSON.parse(savedUser);
-            authState.isLoggedIn = true;
-            updateAuthUI();
-            console.log('Loaded mock user session');
-        } catch (e) {
-            localStorage.removeItem('poxter_mock_user');
-        }
-    }
-}
-
-// Check if user is logged in
-function isLoggedIn() {
-    return authState.isLoggedIn && authState.user !== null;
-}
-
-// Get current user
-function getCurrentUser() {
-    return authState.user;
 }
 
 /**
  * Sign up new user
  */
 async function signUp(userData) {
-    if (!window.supabaseClient || isMockMode) {
-        console.log('Performing mock signup');
-        authState.isLoggedIn = true;
-        authState.user = {
-            id: 'mock-' + Date.now(),
-            fullName: userData.fullName,
-            email: userData.email,
-            phone: userData.phone
-        };
-        localStorage.setItem('poxter_mock_user', JSON.stringify(authState.user));
-        updateAuthUI();
-        return { success: true, user: authState.user };
+    if (!window.supabaseClient) {
+        return { success: false, error: 'Auth system not ready' };
     }
     try {
         const { data, error } = await window.supabaseClient.auth.signUp({
@@ -133,19 +91,8 @@ async function signUp(userData) {
  * Login user
  */
 async function login(email, password) {
-    if (!window.supabaseClient || isMockMode) {
-        console.log('Performing mock login');
-        // Simple mock login - any password works
-        authState.isLoggedIn = true;
-        authState.user = {
-            id: 'mock-' + Date.now(),
-            fullName: email.split('@')[0],
-            email: email,
-            phone: '9999999999'
-        };
-        localStorage.setItem('poxter_mock_user', JSON.stringify(authState.user));
-        updateAuthUI();
-        return { success: true, user: authState.user };
+    if (!window.supabaseClient) {
+        return { success: false, error: 'Auth system not ready' };
     }
     try {
         const { data, error } = await window.supabaseClient.auth.signInWithPassword({
@@ -176,14 +123,7 @@ async function login(email, password) {
  * Logout user
  */
 async function logout() {
-    if (isMockMode || !window.supabaseClient) {
-        localStorage.removeItem('poxter_mock_user');
-        authState.isLoggedIn = false;
-        authState.user = null;
-        updateAuthUI();
-        showAuthNotification('Logged out successfully (Local)', 'success');
-        return;
-    }
+    if (!window.supabaseClient) return;
     const { error } = await window.supabaseClient.auth.signOut();
     if (error) {
         console.error('Logout error:', error);
@@ -193,6 +133,7 @@ async function logout() {
     updateAuthUI();
     showAuthNotification('Logged out successfully', 'success');
 }
+
 
 /**
  * Update UI based on auth state

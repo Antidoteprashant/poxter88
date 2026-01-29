@@ -1059,3 +1059,29 @@ select:focus {
 .sidebar-overlay.active {
     display: block;
 }
+
+/* ========================================
+   Utilities & Animations
+   ======================================== */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, .3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--admin-text-muted);
+}
