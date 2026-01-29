@@ -121,33 +121,67 @@ async function findOrder(query) {
         if (data && data.length > 0) {
             const order = data[0];
 
+            // Fetch product details if product_id exists
+            let productDetails = {
+                name: 'Poster Order',
+                image: '',
+                price: '₹' + (order.total_price || 0).toLocaleString('en-IN')
+            };
+
+            if (order.product_id) {
+                const { data: pData } = await window.supabaseClient
+                    .from('products')
+                    .select('name, image, price')
+                    .eq('id', order.product_id)
+                    .single();
+
+                if (pData) {
+                    productDetails = {
+                        name: pData.name,
+                        image: pData.image,
+                        price: '₹' + (order.total_price || 0).toLocaleString('en-IN')
+                    };
+                }
+            }
+
             // Map data to UI expectations
             return {
                 orderId: order.id,
                 status: order.status || 'confirmed',
                 statusText: (order.status || 'confirmed').charAt(0).toUpperCase() + (order.status || 'confirmed').slice(1),
                 progress: getProgressFromStatus(order.status || 'confirmed'),
-                estimatedDelivery: new Date(order.estimated_delivery || (new Date(order.created_at).getTime() + 5 * 24 * 60 * 60 * 1000)),
+                estimatedDelivery: order.estimated_delivery ? new Date(order.estimated_delivery) : new Date(new Date(order.created_at).getTime() + 5 * 24 * 60 * 60 * 1000),
                 customer: {
                     name: order.customer_name,
                     phone: order.customer_phone,
                     address: `${order.customer_address}<br>${order.customer_city} - ${order.customer_pincode}`
                 },
                 product: {
-                    name: 'Poster Order', // Simple summary since orders table might have multiple rows or we fetch items separately
-                    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=280&fit=crop',
+                    name: productDetails.name,
+                    image: productDetails.image,
                     quantity: order.quantity || 1,
-                    price: '₹' + (order.total_price || 0).toLocaleString('en-IN')
+                    price: productDetails.price
                 },
                 courier: {
-                    name: order.courier_name || 'BlueDart Express',
-                    awb: order.awb || 'BD' + Math.floor(Math.random() * 1000000000) + 'IN',
-                    trackingUrl: order.tracking_url || 'https://www.bluedart.com/tracking'
+                    name: order.courier_name || 'Awaiting Shipment',
+                    awb: order.awb || '-',
+                    trackingUrl: order.tracking_url || '#'
                 },
-                currentLocation: order.current_location || 'Processing Center',
-                destination: order.customer_city,
+                currentLocation: order.current_location || 'Processing',
+                destination: order.customer_city || '-',
                 timeline: order.timeline || [
-                    { status: 'Order Placed', description: 'Your order has been successfully placed', time: new Date(order.created_at).toLocaleString(), completed: true }
+                    {
+                        status: 'Order Placed',
+                        description: 'Your order has been successfully placed',
+                        time: new Date(order.created_at).toLocaleString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }),
+                        completed: true
+                    }
                 ],
                 updates: order.updates || []
             };
@@ -542,5 +576,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for potential module usage
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { sampleOrders, findOrder };
+    module.exports = { findOrder };
 }
