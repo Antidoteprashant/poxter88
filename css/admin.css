@@ -79,8 +79,10 @@ body {
 }
 
 .login-header h1 {
+    font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: 900;
+    letter-spacing: -0.02em;
     background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -242,8 +244,10 @@ body {
 }
 
 .sidebar-header h2 {
+    font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 900;
+    letter-spacing: -0.02em;
     background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
