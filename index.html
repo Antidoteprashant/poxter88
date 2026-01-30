@@ -390,25 +390,14 @@
                                     </div>
                                 </label>
                                 <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="upi">
+                                    <input type="radio" name="paymentMethod" value="razorpay">
                                     <div class="payment-option-content">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
                                             <path d="m9 12 2 2 4-4"></path>
                                         </svg>
-                                        <div><strong>UPI Payment</strong><span>GPay, PhonePe, Paytm</span></div>
-                                    </div>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="card">
-                                    <div class="payment-option-content">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                                            <path d="M2 10h20"></path>
-                                        </svg>
-                                        <div><strong>Credit/Debit Card</strong><span>All major cards accepted</span>
+                                        <div><strong>Pay Online (Razorpay)</strong><span>UPI, Cards, NetBanking</span>
                                         </div>
                                     </div>
                                 </label>
@@ -436,6 +425,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="js/config.js"></script>
     <script type="module" src="js/products.js"></script>

@@ -306,6 +306,9 @@ function validateCheckoutForm() {
 /**
  * Submit order
  */
+/**
+ * Submit order
+ */
 async function submitOrder() {
     const validation = validateCheckoutForm();
 
@@ -314,7 +317,76 @@ async function submitOrder() {
         return;
     }
 
-    // Show loading state
+    const paymentMethod = validation.data.paymentMethod;
+
+    if (paymentMethod === 'razorpay') {
+        handleRazorpayCheckout(validation.data);
+    } else {
+        // Standard COD flow
+        processOrderCreation(validation.data);
+    }
+}
+
+/**
+ * Handle Razorpay Checkout Flow
+ */
+function handleRazorpayCheckout(formData) {
+    const cartItems = JSON.parse(localStorage.getItem('poxter_cart') || '[]');
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = subtotal >= 999 ? 0 : 99;
+    const total = subtotal + shipping;
+
+    const options = {
+        key: window.import ? import.meta.env.VITE_RAZORPAY_KEY_ID : 'rzp_test_placeholder', // Fallback for safety
+        amount: total * 100, // Amount in paise
+        currency: 'INR',
+        name: 'POXTER88',
+        description: 'Order Payment',
+        image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=200&fit=crop',
+        prefill: {
+            name: formData.fullName,
+            email: formData.email,
+            contact: formData.phone
+        },
+        theme: {
+            color: '#000000'
+        },
+        handler: async function (response) {
+            // Payment success - Create order with Razorpay details
+            await processOrderCreation(formData, {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                payment_status: 'paid'
+            });
+        },
+        modal: {
+            ondismiss: function () {
+                const submitBtn = document.querySelector('.checkout-submit-btn');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Place Order';
+                }
+            }
+        }
+    };
+
+    // Try to get key from config if available
+    try {
+        if (window.poxterConfig && window.poxterConfig.RAZORPAY_KEY_ID) {
+            options.key = window.poxterConfig.RAZORPAY_KEY_ID;
+        }
+    } catch (e) { }
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+}
+
+/**
+ * Common order creation logic for both COD and Razorpay
+ */
+async function processOrderCreation(formData, paymentDetails = {}) {
+    // Show loading state if it wasn't already shown (e.g., for COD)
     const submitBtn = document.querySelector('.checkout-submit-btn');
     if (submitBtn) {
         submitBtn.disabled = true;
@@ -339,23 +411,26 @@ async function submitOrder() {
         // Generate a random order ID for tracking
         const orderId = 'poxter' + Math.floor(100000 + Math.random() * 900000);
 
-        // Map cart items to order rows (following user request for product_id, quantity fields)
-        // If there are multiple items, we'll create multiple rows with the same order ID
+        // Map cart items to order rows
         const orderRows = cartItems.map(item => ({
-            id: orderId + '-' + item.id, // Unique ID for the row, but searchable by orderId
+            id: orderId + '-' + item.id,
             user_id: user.id,
             product_id: item.id,
             quantity: item.quantity,
-            total_price: total, // We store the order total for each row for easy access, or calculate per item
+            total_price: total,
             status: 'confirmed',
-            customer_name: validation.data.fullName,
-            customer_email: validation.data.email,
-            customer_phone: validation.data.phone,
-            customer_address: validation.data.address,
-            customer_city: validation.data.city,
-            customer_pincode: validation.data.pincode,
-            payment_method: validation.data.paymentMethod,
-            payment_status: 'pending'
+            customer_name: formData.fullName,
+            customer_email: formData.email,
+            customer_phone: formData.phone,
+            customer_address: formData.address,
+            customer_city: formData.city,
+            customer_pincode: formData.pincode,
+            payment_method: formData.paymentMethod,
+            payment_status: paymentDetails.payment_status || 'pending',
+            razorpay_order_id: paymentDetails.razorpay_order_id || null,
+            razorpay_payment_id: paymentDetails.razorpay_payment_id || null,
+            razorpay_signature: paymentDetails.razorpay_signature || null,
+            order_id: orderId // For lookup in tracking
         }));
 
         const { error } = await window.supabaseClient
@@ -371,9 +446,9 @@ async function submitOrder() {
         }
 
         // Show success
-        showOrderSuccess(orderId, validation.data.email);
+        showOrderSuccess(orderId, formData.email);
     } catch (err) {
-        console.error('Error submitting order to Supabase:', err);
+        console.error('Error creating order:', err);
         showFormErrors([err.message || 'Failed to place order. Please try again.']);
 
         if (submitBtn) {
