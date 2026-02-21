@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🌌 P O X T E R 8 8 🌌</h1>
+  <h1>P O X T E R 8 8</h1>
   <p><strong>A Modern, High-Performance Premium Poster Store</strong></p>
 </div>
 
@@ -9,9 +9,9 @@ Welcome to **POXTER88**, an immersive e-commerce platform dedicated to premium a
 
 ---
 
-## ✨ Features
+## Features
 
-### 🛍️ Client Storefront
+### Client Storefront
 - **Premium UI/UX**: Dark mode by default, glassmorphism elements, minimal typography, and fluid CSS animations.
 - **Product Gallery**: Browse curated collections of high-quality posters with real-time updates.
 - **Instant Search**: Quickly filter and find products by name.
@@ -19,7 +19,7 @@ Welcome to **POXTER88**, an immersive e-commerce platform dedicated to premium a
 - **Secure Checkout**: Support for Cash on Delivery (COD) and Online Payments (via Razorpay integration).
 - **Order Tracking**: Dedicated portal to track real-time order status via Order ID.
 
-### 🔐 Admin Dashboard
+### Admin Dashboard
 - **Analytics Overview**: Real-time sales metrics, active users, total orders, and revenue insights.
 - **Inventory Management**: Effortlessly add, edit, or delete products and upload high-res poster images.
 - **Order Management**: Monitor all incoming orders and update statuses effortlessly (*Processing, Confirmed, Shipped, Delivered*).
@@ -28,7 +28,7 @@ Welcome to **POXTER88**, an immersive e-commerce platform dedicated to premium a
 ---
 
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: HTML5, Vanilla CSS3, Vanilla JavaScript (ES6+)
 - **Build Tool**: [Vite](https://vitejs.dev/) - Blazing fast hot module replacement (HMR) and optimized builds.
@@ -38,18 +38,18 @@ Welcome to **POXTER88**, an immersive e-commerce platform dedicated to premium a
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these steps to set up the project locally for development and testing.
 
-### 📋 Prerequisites
+### Prerequisites
 Ensure you have the following installed and configured:
 -   **Node.js** (v16.x or higher)
 -   **npm** (Node Package Manager)
 -   A **Supabase** account and project
 -   A **Razorpay** account for Test/Live API keys
 
-### ⚙️ Installation & Setup
+### Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -80,7 +80,7 @@ Ensure you have the following installed and configured:
    ```
    > Your application is now running at `http://localhost:5173`. Changes will live-reload automatically.
 
-### 📦 Build for Production
+### Build for Production
 
 To create an optimized, minified production build:
 ```bash
@@ -93,7 +93,7 @@ npm run preview
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 poxter88/
@@ -110,7 +110,7 @@ poxter88/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are always welcome! 
 Feel free to check the [issues page](https://github.com/Antidoteprashant/poxter88/issues) if you want to contribute.
@@ -123,11 +123,11 @@ Feel free to check the [issues page](https://github.com/Antidoteprashant/poxter8
 
 ---
 
-## 📝 License
+## License
 
 Distributed under the **ISC License**. See `LICENSE` for more information.
 
 ---
 <div align="center">
-  Crafted with ❤️ for aesthetic web minimalists.
+  Crafted with care for aesthetic web minimalists.
 </div>
